@@ -562,16 +562,37 @@
                 margin: 0 auto;
             }
 
+            .pricing-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 2rem;
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+
             .pricing-card {
                 background: rgba(255, 255, 255, 0.05);
                 backdrop-filter: blur(20px);
                 border: 1px solid rgba(255, 255, 255, 0.1);
                 border-radius: 30px;
-                padding: 3rem;
-                max-width: 500px;
-                margin: 0 auto;
+                padding: 2.5rem;
                 text-align: center;
                 position: relative;
+                transition: all 0.3s ease;
+            }
+
+            .pricing-card:hover {
+                transform: translateY(-8px);
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            }
+
+            .pricing-card.popular {
+                border: 2px solid var(--primary-blue);
+                transform: scale(1.05);
+            }
+
+            .pricing-card.popular:hover {
+                transform: scale(1.05) translateY(-8px);
             }
 
             .pricing-badge {
@@ -599,7 +620,7 @@
             }
 
             .pricing-amount {
-                font-size: 4rem;
+                font-size: 3.5rem;
                 font-weight: 900;
                 margin-bottom: 0.5rem;
                 background: linear-gradient(
@@ -610,6 +631,10 @@
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
+            }
+
+            .pricing-card.popular .pricing-amount {
+                font-size: 4rem;
             }
 
             .pricing-period {
@@ -1006,12 +1031,30 @@
                     font-size: 1.1rem;
                 }
 
+                .pricing-grid {
+                    grid-template-columns: 1fr;
+                    gap: 1.5rem;
+                    padding: 0 1rem;
+                }
+
                 .pricing-card {
                     padding: 2rem;
-                    margin: 0 1rem;
+                    margin: 0;
+                }
+
+                .pricing-card.popular {
+                    transform: none;
+                }
+
+                .pricing-card.popular:hover {
+                    transform: translateY(-4px);
                 }
 
                 .pricing-amount {
+                    font-size: 2.5rem;
+                }
+
+                .pricing-card.popular .pricing-amount {
                     font-size: 3rem;
                 }
 
@@ -1071,6 +1114,10 @@
 
                 .pricing {
                     padding: 3rem 0.75rem;
+                }
+
+                .pricing-grid {
+                    padding: 0;
                 }
 
                 .pricing-card {
@@ -1285,7 +1332,7 @@
                         certifications recognized by leading medical
                         institutions.
                     </p>
-                    <a href="#" class="feature-link">View certifications →</a>
+                    <a href="#" class="feature-link">Coming Soon</a>
                 </div>
             </div>
         </section>
@@ -1301,38 +1348,101 @@
                     </p>
                 </div>
 
-                <div class="pricing-card">
-                    <div class="pricing-badge">Most Popular</div>
-                    <div class="pricing-plan">ECMO Mastery Program</div>
-                    <div class="pricing-amount">$99</div>
-                    <div class="pricing-period">12 months complete access</div>
+                <div class="pricing-grid">
+                    <!-- 3 Month Plan -->
+                    <div class="pricing-card">
+                        <div class="pricing-plan">3 Months</div>
+                        <div class="pricing-amount">$59</div>
+                        <div class="pricing-period">3 months access</div>
 
-                    <div class="pricing-features">
-                        <div class="pricing-feature">
-                            Complete 14-topic ECMO curriculum
+                        <div class="pricing-features">
+                            <div class="pricing-feature">
+                                Complete 14-topic ECMO curriculum
+                            </div>
+                            <div class="pricing-feature">
+                                5000+ expert-reviewed questions
+                            </div>
+                            <div class="pricing-feature">
+                                Interactive learning modules
+                            </div>
+                            <div class="pricing-feature">
+                                Real-time performance analytics
+                            </div>
+                            <div class="pricing-feature">
+                                Multi-Device Responsive
+                            </div>
+                            <div class="pricing-feature">Email support</div>
                         </div>
-                        <div class="pricing-feature">
-                            5000+ expert-reviewed questions
-                        </div>
-                        <div class="pricing-feature">
-                            Interactive learning modules
-                        </div>
-                        <div class="pricing-feature">
-                            Real-time performance analytics
-                        </div>
-                        <div class="pricing-feature">
-                            Clinical scenario simulations
-                        </div>
-                        <div class="pricing-feature">Mobile app access</div>
 
-                        <div class="pricing-feature">
-                            Certification upon completion
-                        </div>
+                        <a href="dashboard.html" class="pricing-cta"
+                            >Get Started</a
+                        >
                     </div>
 
-                    <a href="dashboard.html" class="pricing-cta"
-                        >Start Your Journey</a
-                    >
+                    <!-- 6 Month Plan -->
+                    <div class="pricing-card">
+                        <div class="pricing-plan">6 Months</div>
+                        <div class="pricing-amount">$79</div>
+                        <div class="pricing-period">6 months access</div>
+
+                        <div class="pricing-features">
+                            <div class="pricing-feature">
+                                Complete 14-topic ECMO curriculum
+                            </div>
+                            <div class="pricing-feature">
+                                5000+ expert-reviewed questions
+                            </div>
+                            <div class="pricing-feature">
+                                Interactive learning modules
+                            </div>
+                            <div class="pricing-feature">
+                                Real-time performance analytics
+                            </div>
+
+                            <div class="pricing-feature">
+                                Multi-Device Responsive
+                            </div>
+                            <div class="pricing-feature">Email support</div>
+                        </div>
+
+                        <a href="dashboard.html" class="pricing-cta"
+                            >Choose Plan</a
+                        >
+                    </div>
+
+                    <!-- 12 Month Plan -->
+                    <div class="pricing-card popular">
+                        <div class="pricing-badge">Most Popular</div>
+                        <div class="pricing-plan">12 Month</div>
+                        <div class="pricing-amount">$99</div>
+                        <div class="pricing-period">
+                            12 months complete access
+                        </div>
+
+                        <div class="pricing-features">
+                            <div class="pricing-feature">
+                                Complete 14-topic ECMO curriculum
+                            </div>
+                            <div class="pricing-feature">
+                                5000+ expert-reviewed questions
+                            </div>
+                            <div class="pricing-feature">
+                                Interactive learning modules
+                            </div>
+                            <div class="pricing-feature">
+                                Real-time performance analytics
+                            </div>
+
+                            <div class="pricing-feature">
+                                Multi-Device Responsive
+                            </div>
+                            <div class="pricing-feature">Priority support</div>
+                        </div>
+
+                        <a href="dashboard.html" class="pricing-cta"
+                            >Start Your Journey</a
+                        >
+                    </div>
                 </div>
             </div>
         </section>
