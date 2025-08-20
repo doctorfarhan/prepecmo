@@ -1,0 +1,1290 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PrepECMO - Notes</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8fafc;
+                color: #1e293b;
+                line-height: 1.6;
+            }
+
+            /* Dashboard Layout */
+            .dashboard-layout {
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                min-height: 100vh;
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+                background: #ffffff;
+                border-right: 1px solid #e2e8f0;
+                padding: 24px 0;
+                box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-header {
+                padding: 0 24px;
+                margin-bottom: 32px;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0 16px;
+            }
+
+            .sidebar-item {
+                margin-bottom: 8px;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                padding: 14px 20px;
+                color: #64748b;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.2s;
+                font-weight: 500;
+            }
+
+            .sidebar-link:hover {
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+            .sidebar-link.active {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .sidebar-link span {
+                margin-left: 12px;
+            }
+
+            /* Main Content */
+            .main-content {
+                background: #f8fafc;
+                padding: 32px;
+                overflow-y: auto;
+            }
+
+            .main-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 32px;
+            }
+
+            .header-info {
+                flex: 1;
+            }
+
+            .main-title {
+                font-size: 32px;
+                color: #1e293b;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .main-subtitle {
+                color: #64748b;
+                font-size: 18px;
+            }
+
+            .new-note-btn {
+                background: #1d4ed8;
+                color: white;
+                border: none;
+                padding: 14px 28px;
+                border-radius: 8px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+                font-size: 16px;
+            }
+
+            .new-note-btn:hover {
+                background: #1e40af;
+                transform: translateY(-2px);
+            }
+
+            /* Search and Filter */
+            .search-filter-section {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 24px;
+                margin-bottom: 24px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .search-controls {
+                display: grid;
+                grid-template-columns: 1fr auto auto;
+                gap: 16px;
+                align-items: center;
+            }
+
+            .search-input {
+                padding: 12px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                font-size: 16px;
+                transition: border-color 0.2s;
+            }
+
+            .search-input:focus {
+                outline: none;
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+            }
+
+            .tag-filter {
+                padding: 10px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                background: white;
+                cursor: pointer;
+                min-width: 150px;
+            }
+
+            .sort-filter {
+                padding: 10px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                background: white;
+                cursor: pointer;
+                min-width: 120px;
+            }
+
+            /* Notes Layout */
+            .notes-layout {
+                display: grid;
+                grid-template-columns: 1fr 400px;
+                gap: 24px;
+            }
+
+            /* Notes List */
+            .notes-list {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .notes-header {
+                padding: 20px 24px;
+                border-bottom: 1px solid #e2e8f0;
+                background: #f8fafc;
+            }
+
+            .notes-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1e293b;
+            }
+
+            .notes-container {
+                max-height: 600px;
+                overflow-y: auto;
+            }
+
+            .note-item {
+                padding: 20px 24px;
+                border-bottom: 1px solid #f1f5f9;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+
+            .note-item:hover {
+                background: #f8fafc;
+            }
+
+            .note-item.active {
+                background: #eff6ff;
+                border-left: 4px solid #1d4ed8;
+            }
+
+            .note-item:last-child {
+                border-bottom: none;
+            }
+
+            .note-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                margin-bottom: 8px;
+            }
+
+            .note-title {
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 4px;
+                font-size: 16px;
+            }
+
+            .note-source {
+                color: #64748b;
+                font-size: 14px;
+                margin-bottom: 8px;
+            }
+
+            .note-preview {
+                color: #64748b;
+                font-size: 14px;
+                line-height: 1.5;
+                margin-bottom: 12px;
+                display: -webkit-box;
+                -webkit-line-clamp: 2;
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+            }
+
+            .note-tags {
+                display: flex;
+                gap: 6px;
+                flex-wrap: wrap;
+            }
+
+            .note-tag {
+                background: #eff6ff;
+                color: #1e40af;
+                padding: 2px 8px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: 500;
+            }
+
+            .note-date {
+                color: #9ca3af;
+                font-size: 12px;
+                margin-left: 12px;
+            }
+
+            /* Note Editor */
+            .note-editor {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 24px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .editor-header {
+                margin-bottom: 24px;
+            }
+
+            .editor-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 16px;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 500;
+                color: #374151;
+            }
+
+            .form-input {
+                width: 100%;
+                padding: 12px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                font-size: 14px;
+                transition: border-color 0.2s;
+            }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+            }
+
+            .form-textarea {
+                width: 100%;
+                padding: 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                font-size: 14px;
+                resize: vertical;
+                min-height: 200px;
+                font-family: inherit;
+                line-height: 1.6;
+                transition: border-color 0.2s;
+            }
+
+            .form-textarea:focus {
+                outline: none;
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+            }
+
+            .editor-actions {
+                display: flex;
+                gap: 12px;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .btn-primary {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #1e40af;
+            }
+
+            .btn-secondary {
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+            }
+
+            .btn-secondary:hover {
+                background: #e2e8f0;
+            }
+
+            .btn-danger {
+                background: #ef4444;
+                color: white;
+            }
+
+            .btn-danger:hover {
+                background: #dc2626;
+            }
+
+            /* Quick Actions */
+            .quick-actions {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 16px;
+                margin-top: 24px;
+            }
+
+            .quick-actions-title {
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 12px;
+            }
+
+            .action-buttons {
+                display: flex;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                background: #eff6ff;
+                color: #1e40af;
+                border: 1px solid #bfdbfe;
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .action-btn:hover {
+                background: #dbeafe;
+            }
+
+            /* Empty State */
+            .empty-state {
+                text-align: center;
+                padding: 60px 20px;
+                color: #64748b;
+            }
+
+            .empty-icon {
+                font-size: 48px;
+                margin-bottom: 16px;
+            }
+
+            .empty-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 8px;
+            }
+
+            .empty-description {
+                margin-bottom: 24px;
+            }
+
+            /* Mobile Header */
+            .mobile-header {
+                display: none;
+                background: #ffffff;
+                padding: 16px 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .mobile-header-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .hamburger-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .hamburger-btn span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background: #1d4ed8;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            /* Mobile Menu */
+            .mobile-menu {
+                position: fixed;
+                top: 0;
+                left: -300px;
+                width: 300px;
+                height: 100vh;
+                background: #ffffff;
+                z-index: 1001;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .mobile-menu.open {
+                left: 0;
+            }
+
+            .mobile-menu-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 24px;
+                border-bottom: 1px solid #e2e8f0;
+                background: #f8fafc;
+            }
+
+            .mobile-menu-logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 28px;
+                cursor: pointer;
+                color: #64748b;
+                padding: 0;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-menu-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .mobile-menu-list li {
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .mobile-menu-list a {
+                display: flex;
+                align-items: center;
+                padding: 16px 24px;
+                color: #64748b;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.2s;
+            }
+
+            .mobile-menu-list a:hover {
+                background: #f8fafc;
+                color: #1d4ed8;
+            }
+
+            .mobile-menu-list a.active {
+                background: #eff6ff;
+                color: #1d4ed8;
+                border-right: 4px solid #1d4ed8;
+            }
+
+            /* Mobile Menu Overlay */
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                body {
+                    padding-top: 70px;
+                }
+
+                .mobile-header {
+                    display: block;
+                }
+
+                .dashboard-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .sidebar {
+                    display: none;
+                }
+
+                .main-content {
+                    padding: 20px;
+                }
+
+                .main-title {
+                    font-size: 24px;
+                }
+
+                .main-subtitle {
+                    font-size: 16px;
+                }
+
+                .main-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 16px;
+                }
+
+                .search-controls {
+                    grid-template-columns: 1fr;
+                    gap: 12px;
+                }
+
+                .notes-layout {
+                    grid-template-columns: 1fr;
+                    gap: 20px;
+                }
+
+                .note-editor {
+                    order: -1;
+                }
+
+                .form-textarea {
+                    min-height: 150px;
+                }
+
+                .editor-actions {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                .action-buttons {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                .action-btn {
+                    width: 100%;
+                    text-align: center;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="mobile-header-content">
+                <button class="hamburger-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="mobile-logo">PrepECMO</div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-logo">PrepECMO</div>
+                <button class="close-btn" onclick="closeMobileMenu()">&times;</button>
+            </div>
+            <ul class="mobile-menu-list">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="modules.html">📚 Learn</a></li>
+                <li><a href="qbank.html">❓ Question Banks</a></li>
+                <li><a href="mock.html">🎯 Custom Exams</a></li>
+                <li><a href="notes.html" class="active">📝 Notes</a></li>
+                <li><a href="analytics.html">📈 Analytics</a></li>
+                <li><a href="index.html">⚙️ Home</a></li>
+            </ul>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo">PrepECMO</div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="dashboard.html" class="sidebar-link">
+                            📊<span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="modules.html" class="sidebar-link">
+                            📚<span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="qbank.html" class="sidebar-link">
+                            ❓<span>Question Banks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="mock.html" class="sidebar-link">
+                            🎯<span>Custom Exams</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="notes.html" class="sidebar-link active">
+                            📝<span>Notes</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="analytics.html" class="sidebar-link">
+                            📈<span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="index.html" class="sidebar-link">
+                            ⚙️<span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="main-header">
+                    <div class="header-info">
+                        <h1 class="main-title">My Notes</h1>
+                        <p class="main-subtitle">
+                            Save and organize important ECMO concepts and
+                            explanations
+                        </p>
+                    </div>
+                    <button class="new-note-btn" onclick="createNewNote()">
+                        + New Note
+                    </button>
+                </div>
+
+                <!-- Search and Filter -->
+                <div class="search-filter-section">
+                    <div class="search-controls">
+                        <input
+                            type="text"
+                            class="search-input"
+                            placeholder="Search notes..."
+                            id="searchInput"
+                        />
+                        <select class="tag-filter" id="tagFilter">
+                            <option value="">All Tags</option>
+                            <option value="fundamentals">Fundamentals</option>
+                            <option value="circuit">Circuit</option>
+                            <option value="management">Management</option>
+                            <option value="complications">Complications</option>
+                            <option value="cannulation">Cannulation</option>
+                        </select>
+                        <select class="sort-filter" id="sortFilter">
+                            <option value="recent">Most Recent</option>
+                            <option value="oldest">Oldest First</option>
+                            <option value="alphabetical">Alphabetical</option>
+                            <option value="source">By Source</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Notes Layout -->
+                <div class="notes-layout">
+                    <!-- Notes List -->
+                    <div class="notes-list">
+                        <div class="notes-header">
+                            <div class="notes-title">Saved Notes (12)</div>
+                        </div>
+
+                        <div class="notes-container">
+                            <div
+                                class="note-item active"
+                                onclick="selectNote(1)"
+                            >
+                                <div class="note-header">
+                                    <div>
+                                        <div class="note-title">
+                                            VV-ECMO Indications
+                                        </div>
+                                        <div class="note-source">
+                                            From: Quiz Review - ECMO
+                                            Fundamentals
+                                        </div>
+                                    </div>
+                                    <div class="note-date">2 days ago</div>
+                                </div>
+                                <div class="note-preview">
+                                    VV-ECMO (veno-venous ECMO) is primarily
+                                    indicated for severe respiratory failure
+                                    when conventional mechanical ventilation and
+                                    medical therapy have failed...
+                                </div>
+                                <div class="note-tags">
+                                    <span class="note-tag"
+                                        >respiratory-failure</span
+                                    >
+                                    <span class="note-tag">vv-ecmo</span>
+                                    <span class="note-tag">indications</span>
+                                </div>
+                            </div>
+
+                            <div class="note-item" onclick="selectNote(2)">
+                                <div class="note-header">
+                                    <div>
+                                        <div class="note-title">
+                                            ECMO Flow Rates
+                                        </div>
+                                        <div class="note-source">
+                                            From: Quiz Review - ECMO Management
+                                        </div>
+                                    </div>
+                                    <div class="note-date">3 days ago</div>
+                                </div>
+                                <div class="note-preview">
+                                    Adult ECMO requires blood flow rates of 3-7
+                                    L/min to provide adequate support. This
+                                    corresponds to approximately 60-100% of
+                                    normal cardiac output...
+                                </div>
+                                <div class="note-tags">
+                                    <span class="note-tag">management</span>
+                                    <span class="note-tag">flow-rates</span>
+                                    <span class="note-tag">hemodynamics</span>
+                                </div>
+                            </div>
+
+                            <div class="note-item" onclick="selectNote(3)">
+                                <div class="note-header">
+                                    <div>
+                                        <div class="note-title">
+                                            Circuit Components Overview
+                                        </div>
+                                        <div class="note-source">
+                                            From: Learn Module - Circuit &
+                                            Components
+                                        </div>
+                                    </div>
+                                    <div class="note-date">5 days ago</div>
+                                </div>
+                                <div class="note-preview">
+                                    Key components of ECMO circuit include:
+                                    centrifugal pump (blood flow), oxygenator
+                                    (gas exchange), heat exchanger (temperature
+                                    control)...
+                                </div>
+                                <div class="note-tags">
+                                    <span class="note-tag">circuit</span>
+                                    <span class="note-tag">components</span>
+                                    <span class="note-tag">fundamentals</span>
+                                </div>
+                            </div>
+
+                            <div class="note-item" onclick="selectNote(4)">
+                                <div class="note-header">
+                                    <div>
+                                        <div class="note-title">
+                                            Cannulation Sites for VV-ECMO
+                                        </div>
+                                        <div class="note-source">
+                                            From: Learn Module - Cannulation
+                                            Techniques
+                                        </div>
+                                    </div>
+                                    <div class="note-date">1 week ago</div>
+                                </div>
+                                <div class="note-preview">
+                                    VV-ECMO cannulation options: 1)
+                                    Femoral-internal jugular configuration, 2)
+                                    Dual-lumen single cannula via internal
+                                    jugular...
+                                </div>
+                                <div class="note-tags">
+                                    <span class="note-tag">cannulation</span>
+                                    <span class="note-tag">vv-ecmo</span>
+                                    <span class="note-tag"
+                                        >vascular-access</span
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="note-item" onclick="selectNote(5)">
+                                <div class="note-header">
+                                    <div>
+                                        <div class="note-title">
+                                            ECMO Complications - Bleeding
+                                        </div>
+                                        <div class="note-source">
+                                            From: Custom Notes
+                                        </div>
+                                    </div>
+                                    <div class="note-date">1 week ago</div>
+                                </div>
+                                <div class="note-preview">
+                                    Bleeding complications in ECMO:
+                                    coagulopathy, thrombocytopenia,
+                                    circuit-related bleeding. Management
+                                    strategies include...
+                                </div>
+                                <div class="note-tags">
+                                    <span class="note-tag">complications</span>
+                                    <span class="note-tag">bleeding</span>
+                                    <span class="note-tag"
+                                        >anticoagulation</span
+                                    >
+                                </div>
+                            </div>
+
+                            <div class="note-item" onclick="selectNote(6)">
+                                <div class="note-header">
+                                    <div>
+                                        <div class="note-title">
+                                            Oxygenator Function
+                                        </div>
+                                        <div class="note-source">
+                                            From: Quiz Review - Circuit &
+                                            Components
+                                        </div>
+                                    </div>
+                                    <div class="note-date">2 weeks ago</div>
+                                </div>
+                                <div class="note-preview">
+                                    The oxygenator membrane performs gas
+                                    exchange - oxygen addition and CO2 removal.
+                                    Efficiency depends on blood flow, gas flow,
+                                    and membrane surface area...
+                                </div>
+                                <div class="note-tags">
+                                    <span class="note-tag">oxygenator</span>
+                                    <span class="note-tag">gas-exchange</span>
+                                    <span class="note-tag">circuit</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Note Editor -->
+                    <div class="note-editor">
+                        <div class="editor-header">
+                            <div class="editor-title">Edit Note</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Title</label>
+                            <input
+                                type="text"
+                                class="form-input"
+                                value="VV-ECMO Indications"
+                                id="noteTitle"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"
+                                >Tags (separated by commas)</label
+                            >
+                            <input
+                                type="text"
+                                class="form-input"
+                                value="respiratory-failure, vv-ecmo, indications"
+                                id="noteTags"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Content</label>
+                            <textarea class="form-textarea" id="noteContent">
+VV-ECMO (veno-venous ECMO) is primarily indicated for severe respiratory failure when conventional mechanical ventilation and medical therapy have failed. It provides respiratory support by oxygenating blood and removing CO2, allowing the lungs to rest and heal.
+
+Key indications include:
+- Severe ARDS refractory to conventional therapy
+- Bridge to lung transplantation
+- Acute respiratory failure with reversible cause
+- Failure to wean from mechanical ventilation
+
+Contraindications:
+- Irreversible lung disease (without transplant option)
+- Prolonged mechanical ventilation (>7 days)
+- Severe comorbidities limiting survival
+- Active bleeding or coagulopathy</textarea
+                            >
+                        </div>
+
+                        <div class="editor-actions">
+                            <button
+                                class="btn btn-primary"
+                                onclick="saveNote()"
+                            >
+                                Save Note
+                            </button>
+                            <button
+                                class="btn btn-secondary"
+                                onclick="clearEditor()"
+                            >
+                                Clear
+                            </button>
+                            <button
+                                class="btn btn-danger"
+                                onclick="deleteNote()"
+                            >
+                                Delete
+                            </button>
+                        </div>
+
+                        <!-- Quick Actions -->
+                        <div class="quick-actions">
+                            <div class="quick-actions-title">Quick Actions</div>
+                            <div class="action-buttons">
+                                <button
+                                    class="action-btn"
+                                    onclick="exportNotes()"
+                                >
+                                    📄 Export All Notes
+                                </button>
+                                <button
+                                    class="action-btn"
+                                    onclick="duplicateNote()"
+                                >
+                                    📋 Duplicate Note
+                                </button>
+                                <button
+                                    class="action-btn"
+                                    onclick="shareNote()"
+                                >
+                                    📤 Share Note
+                                </button>
+                                <button
+                                    class="action-btn"
+                                    onclick="printNote()"
+                                >
+                                    🖨️ Print Note
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            let currentNoteId = 1;
+            let notes = [
+                {
+                    id: 1,
+                    title: "VV-ECMO Indications",
+                    source: "Quiz Review - ECMO Fundamentals",
+                    content:
+                        "VV-ECMO (veno-venous ECMO) is primarily indicated for severe respiratory failure...",
+                    tags: ["respiratory-failure", "vv-ecmo", "indications"],
+                    date: "2 days ago",
+                },
+                // Add more notes data here
+            ];
+
+            function selectNote(noteId) {
+                // Remove active class from all notes
+                document.querySelectorAll(".note-item").forEach((item) => {
+                    item.classList.remove("active");
+                });
+
+                // Add active class to selected note
+                event.currentTarget.classList.add("active");
+
+                // Load note data into editor
+                const note = notes.find((n) => n.id === noteId) || notes[0];
+                document.getElementById("noteTitle").value = note.title;
+                document.getElementById("noteTags").value =
+                    note.tags.join(", ");
+                document.getElementById("noteContent").value = note.content;
+
+                currentNoteId = noteId;
+            }
+
+            function createNewNote() {
+                // Clear editor for new note
+                document.getElementById("noteTitle").value = "";
+                document.getElementById("noteTags").value = "";
+                document.getElementById("noteContent").value = "";
+
+                // Remove active class from all notes
+                document.querySelectorAll(".note-item").forEach((item) => {
+                    item.classList.remove("active");
+                });
+
+                currentNoteId = null;
+
+                // Focus on title input
+                document.getElementById("noteTitle").focus();
+            }
+
+            function saveNote() {
+                const title = document.getElementById("noteTitle").value;
+                const tags = document.getElementById("noteTags").value;
+                const content = document.getElementById("noteContent").value;
+
+                if (!title.trim()) {
+                    alert("Please enter a note title");
+                    return;
+                }
+
+                // Simulate saving
+                const saveBtn = document.querySelector(".btn-primary");
+                const originalText = saveBtn.textContent;
+
+                saveBtn.textContent = "Saving...";
+                saveBtn.disabled = true;
+
+                setTimeout(() => {
+                    saveBtn.textContent = "✓ Saved";
+
+                    setTimeout(() => {
+                        saveBtn.textContent = originalText;
+                        saveBtn.disabled = false;
+                    }, 1000);
+                }, 500);
+
+                console.log("Saving note:", { title, tags, content });
+            }
+
+            function clearEditor() {
+                if (
+                    confirm(
+                        "Are you sure you want to clear the editor? Unsaved changes will be lost.",
+                    )
+                ) {
+                    document.getElementById("noteTitle").value = "";
+                    document.getElementById("noteTags").value = "";
+                    document.getElementById("noteContent").value = "";
+                }
+            }
+
+            function deleteNote() {
+                if (
+                    currentNoteId &&
+                    confirm(
+                        "Are you sure you want to delete this note? This action cannot be undone.",
+                    )
+                ) {
+                    // Remove note from UI
+                    document.querySelector(".note-item.active")?.remove();
+                    clearEditor();
+                    console.log("Deleting note:", currentNoteId);
+                }
+            }
+
+            function exportNotes() {
+                // Simulate export
+                alert(
+                    "Notes exported successfully! Check your downloads folder.",
+                );
+            }
+
+            function duplicateNote() {
+                if (currentNoteId) {
+                    const title = document.getElementById("noteTitle").value;
+                    document.getElementById("noteTitle").value =
+                        title + " (Copy)";
+                    currentNoteId = null;
+                }
+            }
+
+            function shareNote() {
+                if (currentNoteId) {
+                    // Simulate sharing
+                    navigator.clipboard
+                        .writeText(
+                            window.location.href + "/notes/" + currentNoteId,
+                        )
+                        .then(() => alert("Note link copied to clipboard!"))
+                        .catch(() => alert("Unable to copy link"));
+                }
+            }
+
+            function printNote() {
+                if (currentNoteId) {
+                    window.print();
+                }
+            }
+
+            // Search functionality
+            document
+                .getElementById("searchInput")
+                .addEventListener("input", function (e) {
+                    const searchTerm = e.target.value.toLowerCase();
+                    document.querySelectorAll(".note-item").forEach((note) => {
+                        const title = note
+                            .querySelector(".note-title")
+                            .textContent.toLowerCase();
+                        const preview = note
+                            .querySelector(".note-preview")
+                            .textContent.toLowerCase();
+
+                        if (
+                            title.includes(searchTerm) ||
+                            preview.includes(searchTerm)
+                        ) {
+                            note.style.display = "block";
+                        } else {
+                            note.style.display = "none";
+                        }
+                    });
+                });
+
+            // Tag filter
+            document
+                .getElementById("tagFilter")
+                .addEventListener("change", function (e) {
+                    const selectedTag = e.target.value;
+                    document.querySelectorAll(".note-item").forEach((note) => {
+                        if (!selectedTag) {
+                            note.style.display = "block";
+                        } else {
+                            const tags = Array.from(
+                                note.querySelectorAll(".note-tag"),
+                            ).map((tag) => tag.textContent);
+                            if (tags.includes(selectedTag)) {
+                                note.style.display = "block";
+                            } else {
+                                note.style.display = "none";
+                            }
+                        }
+                    });
+                });
+
+            // Auto-save functionality
+            let autoSaveTimeout;
+            function setupAutoSave() {
+                ["noteTitle", "noteTags", "noteContent"].forEach((id) => {
+                    document
+                        .getElementById(id)
+                        .addEventListener("input", function () {
+                            clearTimeout(autoSaveTimeout);
+                            autoSaveTimeout = setTimeout(() => {
+                                if (currentNoteId) {
+                                    console.log("Auto-saving note...");
+                                    // Auto-save logic here
+                                }
+                            }, 2000);
+                        });
+                });
+            }
+
+            // Mobile menu functions
+            function toggleMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('mobileMenuOverlay');
+                const body = document.body;
+
+                mobileMenu.classList.add('open');
+                overlay.classList.add('active');
+                body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('mobileMenuOverlay');
+                const body = document.body;
+
+                mobileMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                body.style.overflow = '';
+            }
+
+            // Close mobile menu on window resize if window width > 768px
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+            });
+
+            // Initialize
+            setupAutoSave();
+        </script>
+    </body>
+</html>

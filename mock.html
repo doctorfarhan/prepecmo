@@ -1,0 +1,1137 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PrepECMO - Custom Exams</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8fafc;
+                color: #1e293b;
+                line-height: 1.6;
+            }
+
+            /* Dashboard Layout */
+            .dashboard-layout {
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                min-height: 100vh;
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+                background: #ffffff;
+                border-right: 1px solid #e2e8f0;
+                padding: 24px 0;
+                box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-header {
+                padding: 0 24px;
+                margin-bottom: 32px;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0 16px;
+            }
+
+            .sidebar-item {
+                margin-bottom: 8px;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                padding: 14px 20px;
+                color: #64748b;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.2s;
+                font-weight: 500;
+            }
+
+            .sidebar-link:hover {
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+            .sidebar-link.active {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .sidebar-link span {
+                margin-left: 12px;
+            }
+
+            /* Main Content */
+            .main-content {
+                background: #f8fafc;
+                padding: 32px;
+                overflow-y: auto;
+            }
+
+            .main-header {
+                margin-bottom: 32px;
+            }
+
+            .main-title {
+                font-size: 32px;
+                color: #1e293b;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .main-subtitle {
+                color: #64748b;
+                font-size: 18px;
+            }
+
+            /* Exam Builder Grid */
+            .exam-builder {
+                display: grid;
+                grid-template-columns: 1fr 400px;
+                gap: 32px;
+                max-width: 1200px;
+            }
+
+            /* Topic Selection */
+            .topic-selection {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .section-title {
+                font-size: 20px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 20px;
+            }
+
+            .topic-grid {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 12px;
+                max-height: 400px;
+                overflow-y: auto;
+                padding-right: 8px;
+            }
+
+            .topic-item {
+                display: flex;
+                align-items: center;
+                padding: 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                background: #f8fafc;
+                transition: all 0.2s;
+                cursor: pointer;
+            }
+
+            .topic-item:hover {
+                background: #eff6ff;
+                border-color: #1d4ed8;
+            }
+
+            .topic-item.selected {
+                background: #1d4ed8;
+                border-color: #1d4ed8;
+                color: white;
+            }
+
+            .topic-checkbox {
+                margin-right: 16px;
+                transform: scale(1.2);
+            }
+
+            .topic-info {
+                flex: 1;
+            }
+
+            .topic-name {
+                font-weight: 600;
+                margin-bottom: 4px;
+            }
+
+            .topic-meta {
+                font-size: 13px;
+                opacity: 0.8;
+            }
+
+            .topic-actions {
+                margin-top: 24px;
+            }
+
+            .select-all-btn {
+                background: #1d4ed8;
+                color: white;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                margin-right: 12px;
+                font-weight: 500;
+            }
+
+            .clear-all-btn {
+                background: #f1f5f9;
+                color: #64748b;
+                border: 1px solid #e2e8f0;
+                padding: 10px 20px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-weight: 500;
+            }
+
+            /* Exam Configuration */
+            .exam-config {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                height: fit-content;
+            }
+
+            .form-group {
+                margin-bottom: 24px;
+            }
+
+            .form-label {
+                display: block;
+                margin-bottom: 8px;
+                font-weight: 600;
+                color: #1e293b;
+            }
+
+            .form-input {
+                width: 100%;
+                padding: 12px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                font-size: 14px;
+                transition: border-color 0.2s;
+            }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #1d4ed8;
+                box-shadow: 0 0 0 3px rgba(29, 78, 216, 0.1);
+            }
+
+            .form-select {
+                width: 100%;
+                padding: 12px 16px;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                font-size: 14px;
+                background: white;
+                cursor: pointer;
+            }
+
+            /* Exam Summary */
+            .exam-summary {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 24px;
+            }
+
+            .summary-title {
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 12px;
+            }
+
+            .summary-stats {
+                display: grid;
+                gap: 8px;
+                font-size: 14px;
+                color: #64748b;
+            }
+
+            .summary-row {
+                display: flex;
+                justify-content: space-between;
+            }
+
+            .summary-value {
+                font-weight: 600;
+                color: #1e293b;
+            }
+
+            /* Start Button */
+            .start-exam-btn {
+                width: 100%;
+                background: #1d4ed8;
+                color: white;
+                border: none;
+                padding: 16px 24px;
+                font-size: 18px;
+                font-weight: 600;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .start-exam-btn:hover {
+                background: #1e40af;
+                transform: translateY(-2px);
+            }
+
+            .start-exam-btn:disabled {
+                background: #9ca3af;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+            /* Recent Exams */
+            .recent-exams {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px;
+                margin-top: 32px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .recent-list {
+                list-style: none;
+            }
+
+            .recent-item {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 16px 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .recent-item:last-child {
+                border-bottom: none;
+            }
+
+            .recent-info {
+                flex: 1;
+            }
+
+            .recent-title {
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 4px;
+            }
+
+            .recent-meta {
+                color: #64748b;
+                font-size: 13px;
+            }
+
+            .recent-score {
+                color: #1d4ed8;
+                font-weight: 600;
+                font-size: 16px;
+                margin-right: 16px;
+            }
+
+            .retake-btn {
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+                padding: 8px 16px;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 14px;
+                text-decoration: none;
+            }
+
+            /* Mobile Menu Styles */
+            .mobile-menu {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                background: white;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-menu.open {
+                left: 0;
+            }
+
+            .mobile-menu-header {
+                padding: 20px;
+                border-bottom: 1px solid #e2e8f0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .close-mobile-menu {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #64748b;
+            }
+
+            .mobile-menu-content {
+                padding: 0;
+            }
+
+            .mobile-menu .sidebar-menu {
+                padding: 0;
+            }
+
+            .mobile-menu .sidebar-item {
+                margin-bottom: 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .mobile-menu .sidebar-link {
+                padding: 16px 20px;
+                border-radius: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            .hamburger-menu {
+                display: none;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #1e293b;
+                padding: 8px;
+            }
+
+            .mobile-header {
+                display: none;
+                background: white;
+                padding: 16px 20px;
+                border-bottom: 1px solid #e2e8f0;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .mobile-header-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .mobile-logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .overlay.active {
+                display: block;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                .dashboard-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .sidebar {
+                    display: none;
+                }
+
+                .mobile-header {
+                    display: block;
+                }
+
+                .hamburger-menu {
+                    display: block;
+                }
+
+                .mobile-menu {
+                    display: block;
+                }
+
+                .main-content {
+                    padding: 20px;
+                }
+
+                .main-title {
+                    font-size: 28px;
+                }
+
+                .main-subtitle {
+                    font-size: 16px;
+                }
+
+                .exam-builder {
+                    grid-template-columns: 1fr;
+                    gap: 24px;
+                }
+
+                .topic-grid {
+                    max-height: 300px;
+                }
+
+                .topic-selection,
+                .exam-config {
+                    padding: 20px;
+                }
+
+                .section-title {
+                    font-size: 18px;
+                }
+
+                .topic-actions {
+                    display: flex;
+                    gap: 8px;
+                    margin-bottom: 20px;
+                }
+
+                .select-all-btn,
+                .clear-all-btn {
+                    flex: 1;
+                    font-size: 14px;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .mobile-header {
+                    padding: 12px 16px;
+                }
+
+                .main-content {
+                    padding: 16px;
+                }
+
+                .main-title {
+                    font-size: 24px;
+                }
+
+                .topic-selection,
+                .exam-config {
+                    padding: 16px;
+                }
+
+                .mobile-menu {
+                    width: 260px;
+                }
+
+                .topic-item {
+                    padding: 12px;
+                }
+
+                .topic-actions {
+                    flex-direction: column;
+                }
+
+                .select-all-btn,
+                .clear-all-btn {
+                    width: 100%;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="mobile-header-content">
+                <div class="mobile-logo">PrepECMO</div>
+                <button class="hamburger-menu" onclick="toggleMobileMenu()">
+                    ☰
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="mobile-logo">PrepECMO</div>
+                <button class="close-mobile-menu" onclick="closeMobileMenu()">
+                    ✕
+                </button>
+            </div>
+            <div class="mobile-menu-content">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="dashboard.html" class="sidebar-link" onclick="closeMobileMenu()">
+                            📊<span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="modules.html" class="sidebar-link" onclick="closeMobileMenu()">
+                            📚<span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="qbank.html" class="sidebar-link" onclick="closeMobileMenu()">
+                            ❓<span>Question Banks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="mock.html" class="sidebar-link active" onclick="closeMobileMenu()">
+                            🎯<span>Custom Exams</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="notes.html" class="sidebar-link" onclick="closeMobileMenu()">
+                            📝<span>Notes</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="analytics.html" class="sidebar-link" onclick="closeMobileMenu()">
+                            📈<span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="index.html" class="sidebar-link" onclick="closeMobileMenu()">
+                            ⚙️<span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay" onclick="closeMobileMenu()"></div>
+
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo">PrepECMO</div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="dashboard.html" class="sidebar-link">
+                            📊<span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="modules.html" class="sidebar-link">
+                            📚<span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="qbank.html" class="sidebar-link">
+                            ❓<span>Question Banks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="mock.html" class="sidebar-link active">
+                            🎯<span>Custom Exams</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="notes.html" class="sidebar-link">
+                            📝<span>Notes</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="analytics.html" class="sidebar-link">
+                            📈<span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="index.html" class="sidebar-link">
+                            ⚙️<span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="main-header">
+                    <h1 class="main-title">Create Custom ECMO Exam</h1>
+                    <p class="main-subtitle">
+                        Select topics and customize your practice exam settings
+                    </p>
+                </div>
+
+                <!-- Exam Builder -->
+                <div class="exam-builder">
+                    <!-- Topic Selection -->
+                    <div class="topic-selection">
+                        <h2 class="section-title">Select ECMO Topics</h2>
+
+                        <div class="topic-actions">
+                            <button
+                                class="select-all-btn"
+                                onclick="selectAll()"
+                            >
+                                Select All
+                            </button>
+                            <button class="clear-all-btn" onclick="clearAll()">
+                                Clear All
+                            </button>
+                        </div>
+
+                        <div class="topic-grid">
+                            <div
+                                class="topic-item selected"
+                                data-topic="fundamentals"
+                            >
+                                <input
+                                    type="checkbox"
+                                    class="topic-checkbox"
+                                    checked
+                                />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        🧠 ECMO Fundamentals
+                                    </div>
+                                    <div class="topic-meta">
+                                        50 questions • Basic Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="topic-item selected"
+                                data-topic="circuit"
+                            >
+                                <input
+                                    type="checkbox"
+                                    class="topic-checkbox"
+                                    checked
+                                />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        ⚙️ Circuit & Components
+                                    </div>
+                                    <div class="topic-meta">
+                                        60 questions • Intermediate Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="indications">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        📋 Indications & Contraindications
+                                    </div>
+                                    <div class="topic-meta">
+                                        45 questions • Intermediate Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="topic-item selected"
+                                data-topic="cannulation"
+                            >
+                                <input
+                                    type="checkbox"
+                                    class="topic-checkbox"
+                                    checked
+                                />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        🩸 Cannulation Techniques
+                                    </div>
+                                    <div class="topic-meta">
+                                        50 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="management">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        📊 ECMO Management
+                                    </div>
+                                    <div class="topic-meta">
+                                        50 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="complications">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        ⚠️ ECMO Complications
+                                    </div>
+                                    <div class="topic-meta">
+                                        50 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="weaning">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        🔄 Weaning & Decannulation
+                                    </div>
+                                    <div class="topic-meta">
+                                        40 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="pediatric">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        👶 Pediatric ECMO
+                                    </div>
+                                    <div class="topic-meta">
+                                        35 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="va-ecmo">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        ❤️ VA-ECMO (Cardiac Support)
+                                    </div>
+                                    <div class="topic-meta">
+                                        45 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="vv-ecmo">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        🫁 VV-ECMO (Respiratory Support)
+                                    </div>
+                                    <div class="topic-meta">
+                                        40 questions • Intermediate Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="anticoag">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        💊 ECMO Anticoagulation
+                                    </div>
+                                    <div class="topic-meta">
+                                        30 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="topic-item" data-topic="troubleshoot">
+                                <input type="checkbox" class="topic-checkbox" />
+                                <div class="topic-info">
+                                    <div class="topic-name">
+                                        🔧 ECMO Troubleshooting
+                                    </div>
+                                    <div class="topic-meta">
+                                        35 questions • Advanced Level
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Exam Configuration -->
+                    <div class="exam-config">
+                        <h2 class="section-title">Exam Configuration</h2>
+
+                        <div class="form-group">
+                            <label class="form-label">Exam Name</label>
+                            <input
+                                type="text"
+                                class="form-input"
+                                placeholder="Enter exam name..."
+                                value="My ECMO Practice Exam"
+                            />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"
+                                >Time per Question (minutes)</label
+                            >
+                            <select class="form-select">
+                                <option value="1">1 minute (minimum)</option>
+                                <option value="1.5" selected>
+                                    1.5 minutes
+                                </option>
+                                <option value="2">2 minutes</option>
+                                <option value="2.5">2.5 minutes</option>
+                                <option value="3">3 minutes</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"
+                                >Questions per Topic</label
+                            >
+                            <select class="form-select">
+                                <option value="5">5 questions</option>
+                                <option value="10">10 questions</option>
+                                <option value="15" selected>
+                                    15 questions
+                                </option>
+                                <option value="20">20 questions</option>
+                                <option value="all">All available</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label"
+                                >Question Difficulty</label
+                            >
+                            <select class="form-select">
+                                <option value="mixed" selected>
+                                    Mixed Difficulty
+                                </option>
+                                <option value="basic">Basic Only</option>
+                                <option value="intermediate">
+                                    Intermediate Only
+                                </option>
+                                <option value="advanced">Advanced Only</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Question Order</label>
+                            <select class="form-select">
+                                <option value="random" selected>
+                                    Random Order
+                                </option>
+                                <option value="topic">Grouped by Topic</option>
+                                <option value="difficulty">
+                                    Grouped by Difficulty
+                                </option>
+                            </select>
+                        </div>
+
+                        <!-- Exam Summary -->
+                        <div class="exam-summary">
+                            <div class="summary-title">Exam Summary</div>
+                            <div class="summary-stats">
+                                <div class="summary-row">
+                                    <span>Selected Topics:</span>
+                                    <span class="summary-value">3</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Total Questions:</span>
+                                    <span class="summary-value">45</span>
+                                </div>
+                                <div class="summary-row">
+                                    <span>Estimated Time:</span>
+                                    <span class="summary-value"
+                                        >67.5 minutes</span
+                                    >
+                                </div>
+                                <div class="summary-row">
+                                    <span>Difficulty Mix:</span>
+                                    <span class="summary-value">Mixed</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="start-exam-btn" onclick="startExam()">
+                            Start Custom Exam
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Custom Exams -->
+                <div class="recent-exams">
+                    <h2 class="section-title">Recent Custom Exams</h2>
+                    <ul class="recent-list">
+                        <li class="recent-item">
+                            <div class="recent-info">
+                                <div class="recent-title">
+                                    Mixed ECMO Topics
+                                </div>
+                                <div class="recent-meta">
+                                    3 topics • 45 questions • Completed 2 days
+                                    ago
+                                </div>
+                            </div>
+                            <div class="recent-score">87%</div>
+                            <a href="/exam/retake/123" class="retake-btn"
+                                >Retake</a
+                            >
+                        </li>
+
+                        <li class="recent-item">
+                            <div class="recent-info">
+                                <div class="recent-title">
+                                    Advanced ECMO Management
+                                </div>
+                                <div class="recent-meta">
+                                    5 topics • 75 questions • Completed 1 week
+                                    ago
+                                </div>
+                            </div>
+                            <div class="recent-score">82%</div>
+                            <a href="/exam/retake/122" class="retake-btn"
+                                >Retake</a
+                            >
+                        </li>
+
+                        <li class="recent-item">
+                            <div class="recent-info">
+                                <div class="recent-title">
+                                    ECMO Fundamentals Review
+                                </div>
+                                <div class="recent-meta">
+                                    2 topics • 30 questions • Completed 2 weeks
+                                    ago
+                                </div>
+                            </div>
+                            <div class="recent-score">94%</div>
+                            <a href="/exam/retake/121" class="retake-btn"
+                                >Retake</a
+                            >
+                        </li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            // Mobile menu functions
+            function toggleMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('overlay');
+                const body = document.body;
+                
+                if (mobileMenu.classList.contains('open')) {
+                    closeMobileMenu();
+                } else {
+                    mobileMenu.classList.add('open');
+                    overlay.classList.add('active');
+                    body.style.overflow = 'hidden';
+                }
+            }
+            
+            function closeMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('overlay');
+                const body = document.body;
+                
+                mobileMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                body.style.overflow = '';
+            }
+            
+            // Close mobile menu on window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+            });
+
+            function selectAll() {
+                document.querySelectorAll(".topic-item").forEach((item) => {
+                    item.classList.add("selected");
+                    item.querySelector(".topic-checkbox").checked = true;
+                });
+                updateSummary();
+            }
+
+            function clearAll() {
+                document.querySelectorAll(".topic-item").forEach((item) => {
+                    item.classList.remove("selected");
+                    item.querySelector(".topic-checkbox").checked = false;
+                });
+                updateSummary();
+            }
+
+            function updateSummary() {
+                const selectedTopics = document.querySelectorAll(
+                    ".topic-item.selected",
+                ).length;
+                const questionsPerTopic =
+                    parseInt(document.querySelector("select").value) || 15;
+                const totalQuestions = selectedTopics * questionsPerTopic;
+                const timePerQuestion = 1.5; // from select
+                const estimatedTime = totalQuestions * timePerQuestion;
+
+                document.querySelector(".summary-stats").innerHTML = `
+                <div class="summary-row">
+                    <span>Selected Topics:</span>
+                    <span class="summary-value">${selectedTopics}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Total Questions:</span>
+                    <span class="summary-value">${totalQuestions}</span>
+                </div>
+                <div class="summary-row">
+                    <span>Estimated Time:</span>
+                    <span class="summary-value">${estimatedTime} minutes</span>
+                </div>
+                <div class="summary-row">
+                    <span>Difficulty Mix:</span>
+                    <span class="summary-value">Mixed</span>
+                </div>
+            `;
+
+                const startBtn = document.querySelector(".start-exam-btn");
+                startBtn.disabled = selectedTopics === 0;
+            }
+
+            function startExam() {
+                const selectedTopics = document.querySelectorAll(
+                    ".topic-item.selected",
+                ).length;
+                if (selectedTopics > 0) {
+                    window.location.href = "/exam/start";
+                }
+            }
+
+            // Topic selection handler
+            document.querySelectorAll(".topic-item").forEach((item) => {
+                item.addEventListener("click", function () {
+                    this.classList.toggle("selected");
+                    const checkbox = this.querySelector(".topic-checkbox");
+                    checkbox.checked = this.classList.contains("selected");
+                    updateSummary();
+                });
+            });
+
+            // Initialize
+            updateSummary();
+        </script>
+    </body>
+</html>

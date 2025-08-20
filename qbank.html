@@ -1,0 +1,1140 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PrepECMO - Question Banks</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8fafc;
+                color: #1e293b;
+                line-height: 1.6;
+            }
+
+            /* Dashboard Layout */
+            .dashboard-layout {
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                min-height: 100vh;
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+                background: #ffffff;
+                border-right: 1px solid #e2e8f0;
+                padding: 24px 0;
+                box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-header {
+                padding: 0 24px;
+                margin-bottom: 32px;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0 16px;
+            }
+
+            .sidebar-item {
+                margin-bottom: 8px;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                padding: 14px 20px;
+                color: #64748b;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.2s;
+                font-weight: 500;
+            }
+
+            .sidebar-link:hover {
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+            .sidebar-link.active {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .sidebar-link span {
+                margin-left: 12px;
+            }
+
+            /* Main Content */
+            .main-content {
+                background: #f8fafc;
+                padding: 32px;
+                overflow-y: auto;
+            }
+
+            .main-header {
+                margin-bottom: 32px;
+            }
+
+            .main-title {
+                font-size: 32px;
+                color: #1e293b;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .main-subtitle {
+                color: #64748b;
+                font-size: 18px;
+            }
+
+            /* Filter Section */
+            .filter-section {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 24px;
+                margin-bottom: 32px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .filter-title {
+                font-size: 18px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 16px;
+            }
+
+            .filter-options {
+                display: flex;
+                gap: 16px;
+                flex-wrap: wrap;
+            }
+
+            .filter-btn {
+                padding: 8px 16px;
+                border: 1px solid #e2e8f0;
+                border-radius: 6px;
+                background: white;
+                color: #64748b;
+                cursor: pointer;
+                transition: all 0.2s;
+                font-size: 14px;
+            }
+
+            .filter-btn:hover,
+            .filter-btn.active {
+                background: #1d4ed8;
+                color: white;
+                border-color: #1d4ed8;
+            }
+
+            /* Question Banks Grid */
+            .banks-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+                gap: 24px;
+            }
+
+            .bank-card {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                transition:
+                    transform 0.2s,
+                    box-shadow 0.2s;
+                position: relative;
+            }
+
+            .bank-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+            }
+
+            .bank-header {
+                display: flex;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            .bank-icon {
+                font-size: 32px;
+                margin-right: 16px;
+            }
+
+            .bank-title {
+                font-size: 20px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 4px;
+            }
+
+            .bank-level {
+                font-size: 12px;
+                padding: 4px 8px;
+                border-radius: 12px;
+                font-weight: 600;
+                text-transform: uppercase;
+            }
+
+            .level-basic {
+                background: #dcfce7;
+                color: #166534;
+            }
+
+            .level-intermediate {
+                background: #fef3c7;
+                color: #92400e;
+            }
+
+            .level-advanced {
+                background: #fecaca;
+                color: #991b1b;
+            }
+
+            .bank-progress {
+                margin-bottom: 16px;
+            }
+
+            .progress-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 8px;
+            }
+
+            .progress-label {
+                color: #64748b;
+                font-size: 14px;
+            }
+
+            .progress-percentage {
+                color: #1d4ed8;
+                font-weight: 600;
+                font-size: 14px;
+            }
+
+            .progress-bar {
+                width: 100%;
+                height: 8px;
+                background: #e2e8f0;
+                border-radius: 4px;
+                overflow: hidden;
+                margin-bottom: 8px;
+            }
+
+            .progress-fill {
+                height: 100%;
+                background: #1d4ed8;
+                transition: width 0.3s ease;
+            }
+
+            .progress-stats {
+                display: flex;
+                justify-content: space-between;
+                font-size: 13px;
+                color: #64748b;
+            }
+
+            .bank-stats {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+
+            .stat-item {
+                text-align: center;
+                padding: 12px;
+                background: #f8fafc;
+                border-radius: 8px;
+            }
+
+            .stat-value {
+                font-size: 20px;
+                font-weight: 700;
+                color: #1d4ed8;
+                margin-bottom: 4px;
+            }
+
+            .stat-label {
+                font-size: 12px;
+                color: #64748b;
+                text-transform: uppercase;
+            }
+
+            .bank-actions {
+                display: flex;
+                gap: 12px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                border-radius: 8px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.2s;
+                border: none;
+                cursor: pointer;
+                flex: 1;
+                text-align: center;
+            }
+
+            .btn-primary {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #1e40af;
+            }
+
+            .btn-secondary {
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+            }
+
+            .btn-secondary:hover {
+                background: #e2e8f0;
+            }
+
+            /* Subject Colors */
+            .subject-fundamentals {
+                border-left: 4px solid #1d4ed8;
+            }
+            .subject-circuit {
+                border-left: 4px solid #10b981;
+            }
+            .subject-indications {
+                border-left: 4px solid #8b5cf6;
+            }
+            .subject-cannulation {
+                border-left: 4px solid #ef4444;
+            }
+            .subject-management {
+                border-left: 4px solid #f59e0b;
+            }
+            .subject-complications {
+                border-left: 4px solid #dc2626;
+            }
+            .subject-weaning {
+                border-left: 4px solid #06b6d4;
+            }
+            .subject-pediatric {
+                border-left: 4px solid #ec4899;
+            }
+            .subject-va-ecmo {
+                border-left: 4px solid #84cc16;
+            }
+            .subject-vv-ecmo {
+                border-left: 4px solid #64748b;
+            }
+            .subject-anticoag {
+                border-left: 4px solid #7c3aed;
+            }
+            .subject-troubleshoot {
+                border-left: 4px solid #059669;
+            }
+            .subject-ethics {
+                border-left: 4px solid #6b7280;
+            }
+            .subject-quality {
+                border-left: 4px solid #d97706;
+            }
+
+            /* Mobile Header */
+            .mobile-header {
+                display: none;
+                background: #ffffff;
+                padding: 16px 20px;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 1000;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .mobile-header-content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .hamburger-btn {
+                background: none;
+                border: none;
+                cursor: pointer;
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+                padding: 8px;
+            }
+
+            .hamburger-btn span {
+                display: block;
+                width: 25px;
+                height: 3px;
+                background: #1d4ed8;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            /* Mobile Menu */
+            .mobile-menu {
+                position: fixed;
+                top: 0;
+                left: -300px;
+                width: 300px;
+                height: 100vh;
+                background: #ffffff;
+                z-index: 1001;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+                overflow-y: auto;
+            }
+
+            .mobile-menu.open {
+                left: 0;
+            }
+
+            .mobile-menu-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 24px;
+                border-bottom: 1px solid #e2e8f0;
+                background: #f8fafc;
+            }
+
+            .mobile-menu-logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .close-btn {
+                background: none;
+                border: none;
+                font-size: 28px;
+                cursor: pointer;
+                color: #64748b;
+                padding: 0;
+                width: 32px;
+                height: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .mobile-menu-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .mobile-menu-list li {
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .mobile-menu-list a {
+                display: flex;
+                align-items: center;
+                padding: 16px 24px;
+                color: #64748b;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.2s;
+            }
+
+            .mobile-menu-list a:hover {
+                background: #f8fafc;
+                color: #1d4ed8;
+            }
+
+            .mobile-menu-list a.active {
+                background: #eff6ff;
+                color: #1d4ed8;
+                border-right: 4px solid #1d4ed8;
+            }
+
+            /* Mobile Menu Overlay */
+            .mobile-menu-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 1000;
+                opacity: 0;
+                visibility: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .mobile-menu-overlay.active {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                body {
+                    padding-top: 70px;
+                }
+
+                .mobile-header {
+                    display: block;
+                }
+
+                .dashboard-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .sidebar {
+                    display: none;
+                }
+
+                .main-content {
+                    padding: 20px;
+                }
+
+                .main-title {
+                    font-size: 24px;
+                }
+
+                .main-subtitle {
+                    font-size: 16px;
+                }
+
+                .banks-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .filter-options {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+
+                .bank-card {
+                    padding: 20px;
+                }
+
+                .bank-actions {
+                    flex-direction: column;
+                    gap: 8px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="mobile-header-content">
+                <button class="hamburger-btn" onclick="toggleMobileMenu()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <div class="mobile-logo">PrepECMO</div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="mobile-menu-logo">PrepECMO</div>
+                <button class="close-btn" onclick="closeMobileMenu()">&times;</button>
+            </div>
+            <ul class="mobile-menu-list">
+                <li><a href="dashboard.html">📊 Dashboard</a></li>
+                <li><a href="modules.html">📚 Learn</a></li>
+                <li><a href="qbank.html" class="active">❓ Question Banks</a></li>
+                <li><a href="mock.html">🎯 Custom Exams</a></li>
+                <li><a href="notes.html">📝 Notes</a></li>
+                <li><a href="analytics.html">📈 Analytics</a></li>
+                <li><a href="index.html">⚙️ Home</a></li>
+            </ul>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div class="mobile-menu-overlay" id="mobileMenuOverlay" onclick="closeMobileMenu()"></div>
+
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo">PrepECMO</div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="dashboard.html" class="sidebar-link">
+                            📊<span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="modules.html" class="sidebar-link">
+                            📚<span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="qbank.html" class="sidebar-link active">
+                            ❓<span>Question Banks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="mock.html" class="sidebar-link">
+                            🎯<span>Custom Exams</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="notes.html" class="sidebar-link">
+                            📝<span>Notes</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="analytics.html" class="sidebar-link">
+                            📈<span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="index.html" class="sidebar-link">
+                            ⚙️<span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="main-header">
+                    <h1 class="main-title">ECMO Question Banks</h1>
+                    <p class="main-subtitle">
+                        Practice questions organized by ECMO topic areas and
+                        difficulty levels
+                    </p>
+                </div>
+
+                <!-- Filter Section -->
+                <div class="filter-section">
+                    <div class="filter-title">Filter by Progress</div>
+                    <div class="filter-options">
+                        <button class="filter-btn active">All Topics</button>
+                        <button class="filter-btn">Not Started</button>
+                        <button class="filter-btn">In Progress</button>
+                        <button class="filter-btn">Completed</button>
+                        <button class="filter-btn">
+                            Low Performance (&lt;75%)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Question Banks Grid -->
+                <div class="banks-grid">
+                    <!-- ECMO Fundamentals -->
+                    <div class="bank-card subject-fundamentals">
+                        <div class="bank-header">
+                            <div class="bank-icon">🧠</div>
+                            <div>
+                                <div class="bank-title">ECMO Fundamentals</div>
+                                <div class="bank-level level-basic">Basic</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">94%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 94%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>47/50 questions</span>
+                                <span>91% avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">50</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">3</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Continue</a
+                            >
+                            <a
+                                href="review.html"
+                                class="btn btn-secondary"
+                                >Review</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Circuit & Components -->
+                    <div class="bank-card subject-circuit">
+                        <div class="bank-header">
+                            <div class="bank-icon">⚙️</div>
+                            <div>
+                                <div class="bank-title">
+                                    Circuit & Components
+                                </div>
+                                <div class="bank-level level-intermediate">
+                                    Intermediate
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">67%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 67%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>40/60 questions</span>
+                                <span>86% avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">60</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">20</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Continue</a
+                            >
+                            <a
+                                href="review.html"
+                                class="btn btn-secondary"
+                                >Review</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Indications & Contraindications -->
+                    <div class="bank-card subject-indications">
+                        <div class="bank-header">
+                            <div class="bank-icon">📋</div>
+                            <div>
+                                <div class="bank-title">
+                                    Indications & Contraindications
+                                </div>
+                                <div class="bank-level level-intermediate">
+                                    Intermediate
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">40%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 40%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>18/45 questions</span>
+                                <span>82% avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">45</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">27</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Continue</a
+                            >
+                            <a
+                                href="qbank.html"
+                                class="btn btn-secondary"
+                                >Start Over</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Cannulation Techniques -->
+                    <div class="bank-card subject-cannulation">
+                        <div class="bank-header">
+                            <div class="bank-icon">🩸</div>
+                            <div>
+                                <div class="bank-title">
+                                    Cannulation Techniques
+                                </div>
+                                <div class="bank-level level-advanced">
+                                    Advanced
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">24%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 24%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>12/50 questions</span>
+                                <span>75% avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">50</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">38</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Continue</a
+                            >
+                            <a
+                                href="review.html"
+                                class="btn btn-secondary"
+                                >Review</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- ECMO Management -->
+                    <div class="bank-card subject-management">
+                        <div class="bank-header">
+                            <div class="bank-icon">📊</div>
+                            <div>
+                                <div class="bank-title">ECMO Management</div>
+                                <div class="bank-level level-advanced">
+                                    Advanced
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">82%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 82%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>41/50 questions</span>
+                                <span>88% avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">50</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">9</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Continue</a
+                            >
+                            <a
+                                href="review.html"
+                                class="btn btn-secondary"
+                                >Review</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- ECMO Complications -->
+                    <div class="bank-card subject-complications">
+                        <div class="bank-header">
+                            <div class="bank-icon">⚠️</div>
+                            <div>
+                                <div class="bank-title">ECMO Complications</div>
+                                <div class="bank-level level-advanced">
+                                    Advanced
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">30%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 30%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>15/50 questions</span>
+                                <span>68% avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">50</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">35</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Continue</a
+                            >
+                            <a
+                                href="modules.html"
+                                class="btn btn-secondary"
+                                >Study First</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- VV-ECMO -->
+                    <div class="bank-card subject-vv-ecmo">
+                        <div class="bank-header">
+                            <div class="bank-icon">🫁</div>
+                            <div>
+                                <div class="bank-title">
+                                    VV-ECMO (Respiratory Support)
+                                </div>
+                                <div class="bank-level level-intermediate">
+                                    Intermediate
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 0%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>0/40 questions</span>
+                                <span>-- avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">40</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">40</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Start</a
+                            >
+                            <a href="modules.html" class="btn btn-secondary"
+                                >Learn First</a
+                            >
+                        </div>
+                    </div>
+
+                    <!-- VA-ECMO -->
+                    <div class="bank-card subject-va-ecmo">
+                        <div class="bank-header">
+                            <div class="bank-icon">❤️</div>
+                            <div>
+                                <div class="bank-title">
+                                    VA-ECMO (Cardiac Support)
+                                </div>
+                                <div class="bank-level level-advanced">
+                                    Advanced
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bank-progress">
+                            <div class="progress-header">
+                                <span class="progress-label">Progress</span>
+                                <span class="progress-percentage">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 0%"
+                                ></div>
+                            </div>
+                            <div class="progress-stats">
+                                <span>0/45 questions</span>
+                                <span>-- avg score</span>
+                            </div>
+                        </div>
+
+                        <div class="bank-stats">
+                            <div class="stat-item">
+                                <div class="stat-value">45</div>
+                                <div class="stat-label">Total Questions</div>
+                            </div>
+                            <div class="stat-item">
+                                <div class="stat-value">45</div>
+                                <div class="stat-label">Remaining</div>
+                            </div>
+                        </div>
+
+                        <div class="bank-actions">
+                            <a
+                                href="quiz.html"
+                                class="btn btn-primary"
+                                >Start</a
+                            >
+                            <a href="modules.html" class="btn btn-secondary"
+                                >Learn First</a
+                            >
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            // Filter functionality
+            document.querySelectorAll(".filter-btn").forEach((btn) => {
+                btn.addEventListener("click", function () {
+                    document
+                        .querySelectorAll(".filter-btn")
+                        .forEach((b) => b.classList.remove("active"));
+                    this.classList.add("active");
+
+                    // Add filter logic here
+                    const filter = this.textContent;
+                    console.log("Filter selected:", filter);
+                });
+            });
+
+            // Mobile menu functions
+            function toggleMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('mobileMenuOverlay');
+                const body = document.body;
+
+                mobileMenu.classList.add('open');
+                overlay.classList.add('active');
+                body.style.overflow = 'hidden';
+            }
+
+            function closeMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('mobileMenuOverlay');
+                const body = document.body;
+
+                mobileMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                body.style.overflow = '';
+            }
+
+            // Close mobile menu on window resize if window width > 768px
+            window.addEventListener('resize', function() {
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+            });
+        </script>
+    </body>
+</html>

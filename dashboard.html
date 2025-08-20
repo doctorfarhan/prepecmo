@@ -1,0 +1,956 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PrepECMO - Dashboard</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8fafc;
+                color: #1e293b;
+                line-height: 1.6;
+            }
+
+            /* Dashboard Layout */
+            .dashboard-layout {
+                display: grid;
+                grid-template-columns: 250px 1fr;
+                min-height: 100vh;
+            }
+
+            /* Sidebar Styles */
+            .sidebar {
+                background: #ffffff;
+                border-right: 1px solid #e2e8f0;
+                padding: 24px 0;
+                box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .sidebar-header {
+                padding: 0 24px;
+                margin-bottom: 32px;
+            }
+
+            .logo {
+                font-size: 28px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .sidebar-menu {
+                list-style: none;
+                padding: 0 16px;
+            }
+
+            .sidebar-item {
+                margin-bottom: 8px;
+            }
+
+            .sidebar-link {
+                display: flex;
+                align-items: center;
+                padding: 14px 20px;
+                color: #64748b;
+                text-decoration: none;
+                border-radius: 8px;
+                transition: all 0.2s;
+                font-weight: 500;
+            }
+
+            .sidebar-link:hover {
+                background: #eff6ff;
+                color: #1d4ed8;
+            }
+
+            .sidebar-link.active {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .sidebar-link span {
+                margin-left: 12px;
+            }
+
+            /* Main Content */
+            .main-content {
+                background: #f8fafc;
+                padding: 32px;
+                overflow-y: auto;
+            }
+
+            .main-header {
+                margin-bottom: 32px;
+            }
+
+            .main-title {
+                font-size: 32px;
+                color: #1e293b;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .main-subtitle {
+                color: #64748b;
+                font-size: 18px;
+            }
+
+            /* Stats Grid */
+            .stats-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 24px;
+                margin-bottom: 40px;
+            }
+
+            .stat-card {
+                background: white;
+                padding: 28px;
+                border-radius: 12px;
+                border: 1px solid #e2e8f0;
+                text-align: center;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                transition:
+                    transform 0.2s,
+                    box-shadow 0.2s;
+            }
+
+            .stat-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .stat-number {
+                font-size: 36px;
+                font-weight: 700;
+                color: #1d4ed8;
+                margin-bottom: 8px;
+            }
+
+            .stat-label {
+                color: #64748b;
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            /* Quick Actions Grid */
+            .quick-actions {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+                gap: 24px;
+                margin-bottom: 40px;
+            }
+
+            .action-card {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+                transition:
+                    transform 0.2s,
+                    box-shadow 0.2s;
+            }
+
+            .action-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            }
+
+            .action-header {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 12px;
+                color: #1e293b;
+            }
+
+            .action-content {
+                color: #64748b;
+                font-size: 16px;
+                margin-bottom: 20px;
+                line-height: 1.6;
+            }
+
+            .btn {
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                text-decoration: none;
+                display: inline-block;
+                transition: all 0.2s;
+                border: none;
+                cursor: pointer;
+            }
+
+            .btn-primary {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .btn-primary:hover {
+                background: #1e40af;
+            }
+
+            .btn-secondary {
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+            }
+
+            .btn-secondary:hover {
+                background: #e2e8f0;
+            }
+
+            /* Recent Activity */
+            .recent-activity {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 28px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .activity-header {
+                font-size: 20px;
+                font-weight: 600;
+                margin-bottom: 20px;
+                color: #1e293b;
+            }
+
+            .activity-list {
+                list-style: none;
+            }
+
+            .activity-item {
+                display: flex;
+                align-items: center;
+                padding: 16px 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .activity-item:last-child {
+                border-bottom: none;
+            }
+
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+                background: #eff6ff;
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 16px;
+                font-size: 18px;
+            }
+
+            .activity-content {
+                flex: 1;
+            }
+
+            .activity-title {
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 4px;
+            }
+
+            .activity-meta {
+                color: #64748b;
+                font-size: 14px;
+            }
+
+            .activity-score {
+                color: #1d4ed8;
+                font-weight: 600;
+                font-size: 16px;
+            }
+
+            /* Progress Section */
+            .progress-section {
+                margin-bottom: 40px;
+            }
+
+            .section-title {
+                font-size: 24px;
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 20px;
+            }
+
+            .progress-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 20px;
+            }
+
+            .progress-card {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 24px;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .progress-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 16px;
+            }
+
+            .progress-title {
+                font-weight: 600;
+                color: #1e293b;
+            }
+
+            .progress-percentage {
+                color: #1d4ed8;
+                font-weight: 600;
+            }
+
+            .progress-bar {
+                width: 100%;
+                height: 8px;
+                background: #e2e8f0;
+                border-radius: 4px;
+                overflow: hidden;
+                margin-bottom: 12px;
+            }
+
+            .progress-fill {
+                height: 100%;
+                background: #1d4ed8;
+                transition: width 0.3s ease;
+            }
+
+            .progress-meta {
+                color: #64748b;
+                font-size: 14px;
+            }
+
+            /* Mobile Menu Styles */
+            .mobile-menu {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: -100%;
+                width: 280px;
+                height: 100vh;
+                background: white;
+                z-index: 1000;
+                transition: left 0.3s ease;
+                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            }
+
+            .mobile-menu.open {
+                left: 0;
+            }
+
+            .mobile-menu-header {
+                padding: 20px;
+                border-bottom: 1px solid #e2e8f0;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .close-mobile-menu {
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #64748b;
+            }
+
+            .mobile-menu-content {
+                padding: 0;
+            }
+
+            .mobile-menu .sidebar-menu {
+                padding: 0;
+            }
+
+            .mobile-menu .sidebar-item {
+                margin-bottom: 0;
+                border-bottom: 1px solid #f1f5f9;
+            }
+
+            .mobile-menu .sidebar-link {
+                padding: 16px 20px;
+                border-radius: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            .hamburger-menu {
+                display: none;
+                background: none;
+                border: none;
+                font-size: 24px;
+                cursor: pointer;
+                color: #1e293b;
+                padding: 8px;
+            }
+
+            .mobile-header {
+                display: none;
+                background: white;
+                padding: 16px 20px;
+                border-bottom: 1px solid #e2e8f0;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+
+            .mobile-header-content {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+
+            .mobile-logo {
+                font-size: 24px;
+                font-weight: 700;
+                color: #1d4ed8;
+            }
+
+            .overlay {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+
+            .overlay.active {
+                display: block;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                .dashboard-layout {
+                    grid-template-columns: 1fr;
+                }
+
+                .sidebar {
+                    display: none;
+                }
+
+                .mobile-header {
+                    display: block;
+                }
+
+                .hamburger-menu {
+                    display: block;
+                }
+
+                .mobile-menu {
+                    display: block;
+                }
+
+                .main-content {
+                    padding: 20px;
+                }
+
+                .main-title {
+                    font-size: 28px;
+                }
+
+                .main-subtitle {
+                    font-size: 16px;
+                }
+
+                .stats-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 16px;
+                }
+
+                .stat-card {
+                    padding: 16px;
+                }
+
+                .stat-number {
+                    font-size: 24px;
+                }
+
+                .stat-label {
+                    font-size: 12px;
+                }
+
+                .quick-actions {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+
+                .action-card {
+                    padding: 20px;
+                }
+
+                .action-header {
+                    font-size: 18px;
+                }
+
+                .action-content {
+                    font-size: 14px;
+                    margin: 8px 0 16px 0;
+                }
+
+                .progress-grid {
+                    grid-template-columns: 1fr;
+                    gap: 16px;
+                }
+
+                .progress-card {
+                    padding: 20px;
+                }
+
+                .recent-activity {
+                    padding: 20px;
+                }
+
+                .activity-item {
+                    padding: 12px 0;
+                }
+            }
+
+            @media (max-width: 480px) {
+                .mobile-header {
+                    padding: 12px 16px;
+                }
+
+                .main-content {
+                    padding: 16px;
+                }
+
+                .main-title {
+                    font-size: 24px;
+                }
+
+                .stats-grid {
+                    grid-template-columns: 1fr;
+                }
+
+                .stat-card {
+                    padding: 12px;
+                }
+
+                .action-card {
+                    padding: 16px;
+                }
+
+                .mobile-menu {
+                    width: 260px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Mobile Header -->
+        <div class="mobile-header">
+            <div class="mobile-header-content">
+                <div class="mobile-logo">PrepECMO</div>
+                <button class="hamburger-menu" onclick="toggleMobileMenu()">
+                    ☰
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="mobile-menu-header">
+                <div class="mobile-logo">PrepECMO</div>
+                <button class="close-mobile-menu" onclick="closeMobileMenu()">
+                    ×
+                </button>
+            </div>
+            <div class="mobile-menu-content">
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="dashboard.html" class="sidebar-link active">
+                            📊<span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="modules.html" class="sidebar-link">
+                            📚<span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="qbank.html" class="sidebar-link">
+                            ❓<span>Question Banks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="mock.html" class="sidebar-link">
+                            🎯<span>Custom Exams</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="notes.html" class="sidebar-link">
+                            📝<span>Notes</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="analytics.html" class="sidebar-link">
+                            📈<span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="index.html" class="sidebar-link">
+                            ⚙️<span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay" id="overlay" onclick="closeMobileMenu()"></div>
+
+        <div class="dashboard-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="logo">PrepECMO</div>
+                </div>
+                <ul class="sidebar-menu">
+                    <li class="sidebar-item">
+                        <a href="dashboard.html" class="sidebar-link active">
+                            📊<span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="modules.html" class="sidebar-link">
+                            📚<span>Learn</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="qbank.html" class="sidebar-link">
+                            ❓<span>Question Banks</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="mock.html" class="sidebar-link">
+                            🎯<span>Custom Exams</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="notes.html" class="sidebar-link">
+                            📝<span>Notes</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="analytics.html" class="sidebar-link">
+                            📈<span>Analytics</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-item">
+                        <a href="index.html" class="sidebar-link">
+                            ⚙️<span>Home</span>
+                        </a>
+                    </li>
+                </ul>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="main-header">
+                    <h1 class="main-title">Welcome back, Dr. Sree</h1>
+                    <p class="main-subtitle">
+                        Continue your ECMO training journey
+                    </p>
+                </div>
+
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">72%</div>
+                        <div class="stat-label">Overall Progress</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">156</div>
+                        <div class="stat-label">Questions Completed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">88%</div>
+                        <div class="stat-label">Average Score</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">Study Days</div>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-actions">
+                    <div class="action-card">
+                        <div class="action-header">Continue Learning</div>
+                        <div class="action-content">
+                            Resume your progress with ECMO Circuit & Components
+                            module. You're halfway through the interactive
+                            lessons.
+                        </div>
+                        <a
+                            href="modules.html"
+                            class="btn btn-primary"
+                            >Continue Module</a
+                        >
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-header">Practice Weak Areas</div>
+                        <div class="action-content">
+                            Focus on ECMO Complications - your lowest performing
+                            topic. Improve with targeted practice questions.
+                        </div>
+                        <a
+                            href="qbank.html"
+                            class="btn btn-secondary"
+                            >Practice Questions</a
+                        >
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-header">Take Custom Exam</div>
+                        <div class="action-content">
+                            Test your knowledge across multiple ECMO topics with
+                            a personalized practice exam.
+                        </div>
+                        <a href="mock.html" class="btn btn-secondary"
+                            >Create Exam</a
+                        >
+                    </div>
+
+                    <div class="action-card">
+                        <div class="action-header">Review Notes</div>
+                        <div class="action-content">
+                            Access your saved notes from learning modules and
+                            quiz reviews for quick reference.
+                        </div>
+                        <a href="notes.html" class="btn btn-secondary"
+                            >View Notes</a
+                        >
+                    </div>
+                </div>
+
+                <!-- Progress Section -->
+                <div class="progress-section">
+                    <h2 class="section-title">Topic Progress</h2>
+                    <div class="progress-grid">
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    🧠 ECMO Fundamentals
+                                </div>
+                                <div class="progress-percentage">94%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 94%"
+                                ></div>
+                            </div>
+                            <div class="progress-meta">
+                                47/50 questions completed
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    ⚙️ Circuit & Components
+                                </div>
+                                <div class="progress-percentage">67%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 67%"
+                                ></div>
+                            </div>
+                            <div class="progress-meta">
+                                40/60 questions completed
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    📊 ECMO Management
+                                </div>
+                                <div class="progress-percentage">82%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 82%"
+                                ></div>
+                            </div>
+                            <div class="progress-meta">
+                                41/50 questions completed
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    ⚠️ ECMO Complications
+                                </div>
+                                <div class="progress-percentage">45%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 45%"
+                                ></div>
+                            </div>
+                            <div class="progress-meta">
+                                22/50 questions completed
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    🩸 Cannulation Techniques
+                                </div>
+                                <div class="progress-percentage">58%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 58%"
+                                ></div>
+                            </div>
+                            <div class="progress-meta">
+                                29/50 questions completed
+                            </div>
+                        </div>
+
+                        <div class="progress-card">
+                            <div class="progress-header">
+                                <div class="progress-title">
+                                    📋 Indications & Contraindications
+                                </div>
+                                <div class="progress-percentage">76%</div>
+                            </div>
+                            <div class="progress-bar">
+                                <div
+                                    class="progress-fill"
+                                    style="width: 76%"
+                                ></div>
+                            </div>
+                            <div class="progress-meta">
+                                34/45 questions completed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity -->
+                <div class="recent-activity">
+                    <div class="activity-header">Recent Activity</div>
+                    <ul class="activity-list">
+                        <li class="activity-item">
+                            <div class="activity-icon">📊</div>
+                            <div class="activity-content">
+                                <div class="activity-title">
+                                    ECMO Management Quiz
+                                </div>
+                                <div class="activity-meta">
+                                    Completed 2 hours ago
+                                </div>
+                            </div>
+                            <div class="activity-score">91%</div>
+                        </li>
+
+                        <li class="activity-item">
+                            <div class="activity-icon">📚</div>
+                            <div class="activity-content">
+                                <div class="activity-title">
+                                    Circuit Components Module
+                                </div>
+                                <div class="activity-meta">
+                                    Started yesterday
+                                </div>
+                            </div>
+                            <div class="activity-score">67%</div>
+                        </li>
+
+                        <li class="activity-item">
+                            <div class="activity-icon">🎯</div>
+                            <div class="activity-content">
+                                <div class="activity-title">
+                                    Custom Practice Exam
+                                </div>
+                                <div class="activity-meta">
+                                    Completed 3 days ago
+                                </div>
+                            </div>
+                            <div class="activity-score">85%</div>
+                        </li>
+
+                        <li class="activity-item">
+                            <div class="activity-icon">📝</div>
+                            <div class="activity-content">
+                                <div class="activity-title">
+                                    Added VV-ECMO Notes
+                                </div>
+                                <div class="activity-meta">5 days ago</div>
+                            </div>
+                            <div class="activity-score">✓</div>
+                        </li>
+                    </ul>
+                </div>
+            </main>
+        </div>
+
+        <script>
+            function toggleMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('overlay');
+                
+                mobileMenu.classList.toggle('open');
+                overlay.classList.toggle('active');
+                
+                // Prevent body scroll when menu is open
+                if (mobileMenu.classList.contains('open')) {
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    document.body.style.overflow = 'auto';
+                }
+            }
+
+            function closeMobileMenu() {
+                const mobileMenu = document.getElementById('mobileMenu');
+                const overlay = document.getElementById('overlay');
+                
+                mobileMenu.classList.remove('open');
+                overlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            // Close menu when clicking on a link
+            document.querySelectorAll('.mobile-menu .sidebar-link').forEach(link => {
+                link.addEventListener('click', closeMobileMenu);
+            });
+
+            // Close menu on window resize if needed
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
+                    closeMobileMenu();
+                }
+            });
+        </script>
+    </body>
+</html>

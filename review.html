@@ -1,0 +1,866 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>PrepECMO - Quiz Review</title>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                background-color: #f8fafc;
+                color: #1e293b;
+                line-height: 1.6;
+            }
+
+            /* Header */
+            .review-header {
+                background: white;
+                border-bottom: 1px solid #e2e8f0;
+                padding: 32px;
+                text-align: center;
+                box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            }
+
+            .header-title {
+                font-size: 32px;
+                color: #1e293b;
+                margin-bottom: 8px;
+                font-weight: 700;
+            }
+
+            .header-subtitle {
+                color: #64748b;
+                font-size: 18px;
+            }
+
+            /* Score Summary */
+            .score-summary {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                padding: 32px;
+                margin: 32px auto;
+                max-width: 800px;
+                text-align: center;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+            }
+
+            .score-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 32px;
+            }
+
+            .score-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .score-value {
+                font-size: 42px;
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+
+            .score-label {
+                color: #64748b;
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            .score-overall {
+                color: #1d4ed8;
+            }
+
+            .score-correct {
+                color: #10b981;
+            }
+
+            .score-time {
+                color: #64748b;
+            }
+
+            .score-percentage {
+                color: #f59e0b;
+            }
+
+            /* Performance Badge */
+            .performance-badge {
+                display: inline-block;
+                padding: 12px 24px;
+                border-radius: 20px;
+                font-weight: 600;
+                margin-top: 16px;
+            }
+
+            .badge-excellent {
+                background: #dcfce7;
+                color: #166534;
+            }
+
+            .badge-good {
+                background: #dbeafe;
+                color: #1e40af;
+            }
+
+            .badge-needs-improvement {
+                background: #fef3c7;
+                color: #92400e;
+            }
+
+            /* Review Content */
+            .review-content {
+                max-width: 900px;
+                margin: 0 auto;
+                padding: 32px;
+            }
+
+            /* Filter Tabs */
+            .filter-tabs {
+                display: flex;
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                margin-bottom: 24px;
+                overflow: hidden;
+            }
+
+            .filter-tab {
+                flex: 1;
+                padding: 12px 16px;
+                text-align: center;
+                background: #f8fafc;
+                color: #64748b;
+                cursor: pointer;
+                transition: all 0.2s;
+                font-weight: 500;
+            }
+
+            .filter-tab.active {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .filter-tab:hover:not(.active) {
+                background: #f1f5f9;
+            }
+
+            /* Question Review Items */
+            .question-review {
+                background: white;
+                border: 1px solid #e2e8f0;
+                border-radius: 12px;
+                margin-bottom: 24px;
+                overflow: hidden;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            }
+
+            .question-review.correct {
+                border-left: 6px solid #10b981;
+            }
+
+            .question-review.incorrect {
+                border-left: 6px solid #ef4444;
+            }
+
+            .question-review.flagged {
+                border-left: 6px solid #f59e0b;
+            }
+
+            .question-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 20px 24px;
+                background: #f8fafc;
+                border-bottom: 1px solid #e2e8f0;
+            }
+
+            .question-meta {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+
+            .question-number {
+                font-size: 14px;
+                color: #64748b;
+            }
+
+            .question-topic {
+                background: #eff6ff;
+                color: #1e40af;
+                padding: 4px 12px;
+                border-radius: 12px;
+                font-size: 12px;
+                font-weight: 600;
+            }
+
+            .result-badge {
+                padding: 6px 16px;
+                border-radius: 16px;
+                font-size: 12px;
+                font-weight: 700;
+                text-transform: uppercase;
+            }
+
+            .badge-correct {
+                background: #dcfce7;
+                color: #166534;
+            }
+
+            .badge-incorrect {
+                background: #fecaca;
+                color: #991b1b;
+            }
+
+            .question-body {
+                padding: 24px;
+            }
+
+            .question-text {
+                font-size: 16px;
+                font-weight: 500;
+                margin-bottom: 20px;
+                color: #1e293b;
+                line-height: 1.6;
+            }
+
+            /* Answer Options in Review */
+            .review-options {
+                margin-bottom: 24px;
+            }
+
+            .review-option {
+                display: flex;
+                align-items: flex-start;
+                padding: 12px 16px;
+                margin-bottom: 8px;
+                border-radius: 8px;
+                border: 1px solid transparent;
+            }
+
+            .review-option.correct-answer {
+                background: #f0fdf4;
+                border-color: #bbf7d0;
+            }
+
+            .review-option.user-incorrect {
+                background: #fef2f2;
+                border-color: #fecaca;
+            }
+
+            .review-option.user-correct {
+                background: #f0fdf4;
+                border-color: #bbf7d0;
+            }
+
+            .option-indicator {
+                margin-right: 12px;
+                font-weight: 700;
+                font-size: 16px;
+            }
+
+            .indicator-correct {
+                color: #16a34a;
+            }
+
+            .indicator-incorrect {
+                color: #dc2626;
+            }
+
+            .option-text {
+                flex: 1;
+                color: #1e293b;
+            }
+
+            .answer-tag {
+                background: #22c55e;
+                color: white;
+                padding: 2px 8px;
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: 600;
+                margin-left: auto;
+            }
+
+            .your-answer-tag {
+                background: #ef4444;
+            }
+
+            .correct-answer-tag {
+                background: #22c55e;
+            }
+
+            /* Explanation Box */
+            .explanation-box {
+                background: #f8fafc;
+                border: 1px solid #e2e8f0;
+                border-radius: 8px;
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .explanation-title {
+                font-weight: 600;
+                color: #1e293b;
+                margin-bottom: 12px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .explanation-text {
+                color: #64748b;
+                line-height: 1.7;
+            }
+
+            /* Action Buttons */
+            .question-actions {
+                border-top: 1px solid #e2e8f0;
+                padding: 16px 24px;
+                background: #f8fafc;
+                display: flex;
+                gap: 12px;
+                flex-wrap: wrap;
+            }
+
+            .action-btn {
+                padding: 8px 16px;
+                border-radius: 6px;
+                font-size: 14px;
+                font-weight: 500;
+                text-decoration: none;
+                border: none;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+
+            .btn-add-notes {
+                background: #1d4ed8;
+                color: white;
+            }
+
+            .btn-add-notes:hover {
+                background: #1e40af;
+            }
+
+            .btn-learn-more {
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+            }
+
+            .btn-learn-more:hover {
+                background: #e2e8f0;
+            }
+
+            /* Bottom Actions */
+            .bottom-actions {
+                text-align: center;
+                margin: 40px 0;
+            }
+
+            .main-action-btn {
+                background: #1d4ed8;
+                color: white;
+                border: none;
+                padding: 16px 32px;
+                font-size: 18px;
+                font-weight: 600;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+                margin: 0 8px;
+            }
+
+            .main-action-btn:hover {
+                background: #1e40af;
+                transform: translateY(-2px);
+            }
+
+            .secondary-action-btn {
+                background: #f1f5f9;
+                color: #475569;
+                border: 1px solid #e2e8f0;
+                padding: 16px 32px;
+                font-size: 18px;
+                font-weight: 600;
+                border-radius: 8px;
+                cursor: pointer;
+                transition: all 0.2s;
+                margin: 0 8px;
+            }
+
+            .secondary-action-btn:hover {
+                background: #e2e8f0;
+            }
+
+            /* Mobile Responsive */
+            @media (max-width: 768px) {
+                .review-header {
+                    padding: 20px;
+                }
+
+                .score-summary {
+                    margin: 20px;
+                    padding: 24px;
+                }
+
+                .score-grid {
+                    grid-template-columns: repeat(2, 1fr);
+                    gap: 20px;
+                }
+
+                .review-content {
+                    padding: 20px;
+                }
+
+                .question-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 12px;
+                }
+
+                .question-body {
+                    padding: 16px;
+                }
+
+                .question-actions {
+                    padding: 12px 16px;
+                }
+
+                .bottom-actions {
+                    flex-direction: column;
+                    gap: 12px;
+                }
+
+                .main-action-btn,
+                .secondary-action-btn {
+                    width: 100%;
+                    margin: 0;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Header -->
+        <header class="review-header">
+            <h1 class="header-title">Quiz Review: ECMO Fundamentals</h1>
+            <p class="header-subtitle">
+                Review your answers and learn from detailed explanations
+            </p>
+        </header>
+
+        <!-- Score Summary -->
+        <div class="score-summary">
+            <div class="score-grid">
+                <div class="score-item">
+                    <div class="score-value score-overall">88%</div>
+                    <div class="score-label">Overall Score</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value score-correct">22/25</div>
+                    <div class="score-label">Correct Answers</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value score-time">35:20</div>
+                    <div class="score-label">Time Taken</div>
+                </div>
+                <div class="score-item">
+                    <div class="score-value score-percentage">1.4m</div>
+                    <div class="score-label">Avg per Question</div>
+                </div>
+            </div>
+            <div class="performance-badge badge-excellent">
+                Excellent Performance!
+            </div>
+        </div>
+
+        <!-- Review Content -->
+        <div class="review-content">
+            <!-- Filter Tabs -->
+            <div class="filter-tabs">
+                <div class="filter-tab active" onclick="filterQuestions('all')">
+                    All Questions (25)
+                </div>
+                <div class="filter-tab" onclick="filterQuestions('incorrect')">
+                    Incorrect (3)
+                </div>
+                <div class="filter-tab" onclick="filterQuestions('flagged')">
+                    Flagged (2)
+                </div>
+                <div class="filter-tab" onclick="filterQuestions('correct')">
+                    Correct (22)
+                </div>
+            </div>
+
+            <!-- Question Review Items -->
+
+            <!-- Correct Answer Example -->
+            <div class="question-review correct" data-type="correct">
+                <div class="question-header">
+                    <div class="question-meta">
+                        <div class="question-number">Question 8 of 25</div>
+                        <div class="question-topic">ECMO Fundamentals</div>
+                    </div>
+                    <div class="result-badge badge-correct">Correct</div>
+                </div>
+
+                <div class="question-body">
+                    <div class="question-text">
+                        Which of the following is the primary indication for
+                        VV-ECMO in a critically ill patient with severe
+                        respiratory failure?
+                    </div>
+
+                    <div class="review-options">
+                        <div class="review-option">
+                            <div class="option-indicator">A.</div>
+                            <div class="option-text">
+                                Cardiogenic shock with preserved lung function
+                                and adequate oxygenation
+                            </div>
+                        </div>
+
+                        <div class="review-option user-correct correct-answer">
+                            <div class="option-indicator indicator-correct">
+                                B. ✓
+                            </div>
+                            <div class="option-text">
+                                Severe respiratory failure refractory to
+                                conventional mechanical ventilation and medical
+                                therapy
+                            </div>
+                            <div class="answer-tag correct-answer-tag">
+                                Your Answer
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">C.</div>
+                            <div class="option-text">
+                                Post-cardiotomy low cardiac output syndrome
+                                requiring circulatory support
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">D.</div>
+                            <div class="option-text">
+                                Massive pulmonary embolism with hemodynamic
+                                instability and cardiac arrest
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">E.</div>
+                            <div class="option-text">
+                                Bridge to heart transplantation in end-stage
+                                heart failure patients
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <div class="explanation-title">💡 Explanation</div>
+                        <div class="explanation-text">
+                            VV-ECMO (veno-venous ECMO) is primarily indicated
+                            for severe respiratory failure when conventional
+                            mechanical ventilation and medical therapy have
+                            failed. It provides respiratory support by
+                            oxygenating blood and removing CO2, allowing the
+                            lungs to rest and heal. The other options describe
+                            indications for VA-ECMO (veno-arterial ECMO), which
+                            provides both cardiac and respiratory support.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-actions">
+                    <button
+                        class="action-btn btn-add-notes"
+                        onclick="addToNotes(8)"
+                    >
+                        📝 Add to Notes
+                    </button>
+                    <a
+                        href="modules.html"
+                        class="action-btn btn-learn-more"
+                        >📚 VV vs VA ECMO Module</a
+                    >
+                    <a
+                        href="modules.html"
+                        class="action-btn btn-learn-more"
+                        >📋 ECMO Indications</a
+                    >
+                </div>
+            </div>
+
+            <!-- Incorrect Answer Example -->
+            <div class="question-review incorrect" data-type="incorrect">
+                <div class="question-header">
+                    <div class="question-meta">
+                        <div class="question-number">Question 12 of 25</div>
+                        <div class="question-topic">ECMO Management</div>
+                    </div>
+                    <div class="result-badge badge-incorrect">Incorrect</div>
+                </div>
+
+                <div class="question-body">
+                    <div class="question-text">
+                        What is the typical blood flow rate range for adult ECMO
+                        support to ensure adequate systemic perfusion?
+                    </div>
+
+                    <div class="review-options">
+                        <div class="review-option user-incorrect">
+                            <div class="option-indicator indicator-incorrect">
+                                A. ✗
+                            </div>
+                            <div class="option-text">
+                                1-2 L/min (20-30% of cardiac output)
+                            </div>
+                            <div class="answer-tag your-answer-tag">
+                                Your Answer
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">B.</div>
+                            <div class="option-text">
+                                2-3 L/min (40-50% of cardiac output)
+                            </div>
+                        </div>
+
+                        <div class="review-option correct-answer">
+                            <div class="option-indicator indicator-correct">
+                                C. ✓
+                            </div>
+                            <div class="option-text">
+                                3-7 L/min (60-100% of cardiac output)
+                            </div>
+                            <div class="answer-tag correct-answer-tag">
+                                Correct Answer
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">D.</div>
+                            <div class="option-text">
+                                7-10 L/min (120-150% of cardiac output)
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">E.</div>
+                            <div class="option-text">
+                                Flow rate should match patient's heart rate
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <div class="explanation-title">💡 Explanation</div>
+                        <div class="explanation-text">
+                            Adult ECMO typically requires blood flow rates of
+                            3-7 L/min to provide adequate support. This
+                            corresponds to approximately 60-100% of normal
+                            cardiac output (assuming normal CO of 5-7 L/min).
+                            Lower flow rates (1-2 L/min) would be insufficient
+                            for adequate systemic perfusion, while higher rates
+                            may cause hemolysis and increased complications. The
+                            exact flow rate is individualized based on patient
+                            size, metabolic demands, and degree of native
+                            cardiac function.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-actions">
+                    <button
+                        class="action-btn btn-add-notes"
+                        onclick="addToNotes(12)"
+                    >
+                        📝 Add to Notes
+                    </button>
+                    <a
+                        href="modules.html"
+                        class="action-btn btn-learn-more"
+                        >📚 ECMO Flow Management</a
+                    >
+                    <a
+                        href="qbank.html"
+                        class="action-btn btn-learn-more"
+                        >❓ Practice Similar Questions</a
+                    >
+                </div>
+            </div>
+
+            <!-- Flagged Question Example -->
+            <div class="question-review flagged correct" data-type="flagged">
+                <div class="question-header">
+                    <div class="question-meta">
+                        <div class="question-number">Question 5 of 25</div>
+                        <div class="question-topic">Circuit & Components</div>
+                        <span style="color: #f59e0b; margin-left: 8px"
+                            >🚩 Flagged</span
+                        >
+                    </div>
+                    <div class="result-badge badge-correct">Correct</div>
+                </div>
+
+                <div class="question-body">
+                    <div class="question-text">
+                        Which component of the ECMO circuit is responsible for
+                        removing CO2 from the blood?
+                    </div>
+
+                    <div class="review-options">
+                        <div class="review-option">
+                            <div class="option-indicator">A.</div>
+                            <div class="option-text">Centrifugal pump</div>
+                        </div>
+
+                        <div class="review-option user-correct correct-answer">
+                            <div class="option-indicator indicator-correct">
+                                B. ✓
+                            </div>
+                            <div class="option-text">Oxygenator membrane</div>
+                            <div class="answer-tag correct-answer-tag">
+                                Your Answer
+                            </div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">C.</div>
+                            <div class="option-text">Heat exchanger</div>
+                        </div>
+
+                        <div class="review-option">
+                            <div class="option-indicator">D.</div>
+                            <div class="option-text">Pressure monitor</div>
+                        </div>
+                    </div>
+
+                    <div class="explanation-box">
+                        <div class="explanation-title">💡 Explanation</div>
+                        <div class="explanation-text">
+                            The oxygenator membrane is responsible for both
+                            oxygenation and CO2 removal (decarboxylation). It
+                            functions similarly to the lungs, allowing oxygen to
+                            diffuse into the blood while CO2 diffuses out
+                            through the semi-permeable membrane. The efficiency
+                            of CO2 removal can be adjusted by modifying the
+                            sweep gas flow rate through the oxygenator.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="question-actions">
+                    <button
+                        class="action-btn btn-add-notes"
+                        onclick="addToNotes(5)"
+                    >
+                        📝 Add to Notes
+                    </button>
+                    <a
+                        href="modules.html"
+                        class="action-btn btn-learn-more"
+                        >📚 Oxygenator Function</a
+                    >
+                </div>
+            </div>
+
+            <!-- Bottom Actions -->
+            <div class="bottom-actions">
+                <button
+                    class="main-action-btn"
+                    onclick="window.location.href='qbank.html'"
+                >
+                    Practice More Questions
+                </button>
+                <button
+                    class="secondary-action-btn"
+                    onclick="window.location.href='dashboard.html'"
+                >
+                    Back to Dashboard
+                </button>
+            </div>
+        </div>
+
+        <script>
+            function filterQuestions(type) {
+                // Update active tab
+                document.querySelectorAll(".filter-tab").forEach((tab) => {
+                    tab.classList.remove("active");
+                });
+                event.target.classList.add("active");
+
+                // Show/hide questions based on filter
+                document
+                    .querySelectorAll(".question-review")
+                    .forEach((question) => {
+                        if (type === "all") {
+                            question.style.display = "block";
+                        } else {
+                            const questionType = question.dataset.type;
+                            if (
+                                questionType === type ||
+                                (type === "incorrect" &&
+                                    question.classList.contains("incorrect")) ||
+                                (type === "correct" &&
+                                    question.classList.contains("correct")) ||
+                                (type === "flagged" &&
+                                    question.classList.contains("flagged"))
+                            ) {
+                                question.style.display = "block";
+                            } else {
+                                question.style.display = "none";
+                            }
+                        }
+                    });
+            }
+
+            function addToNotes(questionNumber) {
+                // Simulate adding to notes
+                const button = event.target;
+                const originalText = button.innerHTML;
+
+                button.innerHTML = "✓ Added to Notes";
+                button.style.background = "#10b981";
+
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.background = "#1d4ed8";
+                }, 2000);
+
+                // In real app, this would make an API call to save the content
+                console.log(
+                    "Added question",
+                    questionNumber,
+                    "content to notes",
+                );
+            }
+
+            // Add smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+                anchor.addEventListener("click", function (e) {
+                    e.preventDefault();
+                    document
+                        .querySelector(this.getAttribute("href"))
+                        .scrollIntoView({
+                            behavior: "smooth",
+                        });
+                });
+            });
+        </script>
+    </body>
+</html>
