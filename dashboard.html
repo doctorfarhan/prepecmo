@@ -39,6 +39,17 @@
             }
 
             .logo {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .logo img {
+                height: 70px;
+                width: auto;
+            }
+
+            .logo-text {
                 font-size: 28px;
                 font-weight: 700;
                 color: #1d4ed8;
@@ -564,6 +575,17 @@
             }
 
             .mobile-logo {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .mobile-logo img {
+                height: 45px;
+                width: auto;
+            }
+
+            .mobile-logo-text {
                 font-size: 24px;
                 font-weight: 700;
                 color: #1d4ed8;
@@ -706,7 +728,13 @@
         <!-- Mobile Header -->
         <div class="mobile-header">
             <div class="mobile-header-content">
-                <div class="mobile-logo">PrepECMO</div>
+                <div class="mobile-logo">
+                    <img
+                        src="https://res.cloudinary.com/dn4n3lljr/image/upload/v1755872700/ddose/prepecmologo.png"
+                        alt="PrepECMO Logo"
+                    />
+                    <span class="mobile-logo-text">PrepECMO</span>
+                </div>
                 <button class="hamburger-menu" onclick="toggleMobileMenu()">
                     ☰
                 </button>
@@ -716,7 +744,13 @@
         <!-- Mobile Menu -->
         <div class="mobile-menu" id="mobileMenu">
             <div class="mobile-menu-header">
-                <div class="mobile-logo">PrepECMO</div>
+                <div class="mobile-logo">
+                    <img
+                        src="https://res.cloudinary.com/dn4n3lljr/image/upload/v1755872700/ddose/prepecmologo.png"
+                        alt="PrepECMO Logo"
+                    />
+                    <span class="mobile-logo-text">PrepECMO</span>
+                </div>
                 <button class="close-mobile-menu" onclick="closeMobileMenu()">
                     ×
                 </button>
@@ -769,7 +803,13 @@
             <!-- Sidebar -->
             <aside class="sidebar">
                 <div class="sidebar-header">
-                    <div class="logo">PrepECMO</div>
+                    <div class="logo">
+                        <img
+                            src="https://res.cloudinary.com/dn4n3lljr/image/upload/v1755872700/ddose/prepecmologo.png"
+                            alt="PrepECMO Logo"
+                        />
+                        <span class="logo-text">PrepECMO</span>
+                    </div>
                 </div>
                 <ul class="sidebar-menu">
                     <li class="sidebar-item">
@@ -815,7 +855,8 @@
                 <div class="main-header">
                     <h1 class="main-title">Welcome back, Dr. Sree</h1>
                     <p class="main-subtitle">
-                        Continue your ECMO training journey
+                        Continue your ECMO training journey - Free Trial (5 days
+                        remaining)
                     </p>
                 </div>
 
@@ -841,7 +882,7 @@
                 <!-- Stats Grid -->
                 <div class="stats-grid">
                     <div class="stat-card">
-                        <div class="stat-number">25%</div>
+                        <div class="stat-number">15%</div>
                         <div class="stat-label">Overall Progress</div>
                     </div>
                     <div class="stat-card">
@@ -1186,4 +1227,3 @@
         </script>
     </body>
 </html>
-
