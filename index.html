@@ -60,6 +60,18 @@
             }
 
             .logo {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                letter-spacing: -0.02em;
+            }
+
+            .logo img {
+                height: 90px;
+                width: auto;
+            }
+
+            .logo-text {
                 font-size: 1.75rem;
                 font-weight: 800;
                 background: linear-gradient(
@@ -70,7 +82,6 @@
                 -webkit-background-clip: text;
                 -webkit-text-fill-color: transparent;
                 background-clip: text;
-                letter-spacing: -0.02em;
             }
 
             .nav-menu {
@@ -693,9 +704,21 @@
             }
 
             .footer-logo {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                margin-bottom: 1rem;
+            }
+
+            .footer-logo img {
+                height: 55px;
+                width: auto;
+            }
+
+            .footer-logo-text {
                 font-size: 2rem;
                 font-weight: 800;
-                margin-bottom: 1rem;
                 background: linear-gradient(
                     135deg,
                     var(--primary-blue),
@@ -1155,7 +1178,13 @@
         <!-- Navigation -->
         <div class="nav-container">
             <nav class="nav">
-                <div class="logo">PrepECMO</div>
+                <div class="logo">
+                    <img
+                        src="https://res.cloudinary.com/dn4n3lljr/image/upload/v1755872700/ddose/prepecmologo.png"
+                        alt="PrepECMO Logo"
+                    />
+                    <span class="logo-text">PrepECMO</span>
+                </div>
                 <ul class="nav-menu">
                     <li><a href="#features" class="nav-link">Platform</a></li>
                     <li><a href="#pricing" class="nav-link">Pricing</a></li>
@@ -1450,7 +1479,13 @@
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
-                <div class="footer-logo">PrepECMO</div>
+                <div class="footer-logo">
+                    <img
+                        src="https://res.cloudinary.com/dn4n3lljr/image/upload/v1755872700/ddose/prepecmologo.png"
+                        alt="PrepECMO Logo"
+                    />
+                    <span class="footer-logo-text">PrepECMO</span>
+                </div>
                 <p class="footer-description">
                     Empowering healthcare professionals with advanced ECMO
                     training and education.
@@ -1586,5 +1621,3 @@
         </script>
     </body>
 </html>
-
-
