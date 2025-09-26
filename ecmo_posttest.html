@@ -89,13 +89,17 @@
             color: #555;
         }
 
-        input[type="text"], input[type="email"], input[type="tel"] {
+        input[type="text"], input[type="email"], input[type="tel"], input[type="hidden"] {
             width: 100%;
             padding: 12px;
             border: 2px solid #ddd;
             border-radius: 5px;
             font-size: 16px;
             transition: border-color 0.3s;
+        }
+
+        input[type="hidden"] {
+            display: none;
         }
 
         input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus {
@@ -278,7 +282,7 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
 
-        <form id="postTestForm">
+        <form id="postTestForm" action="https://submit-form.com/rGOpHRDIr" method="POST">
             <div class="user-info">
                 <h3>Personal Information</h3>
                 <div class="input-group">
@@ -294,6 +298,14 @@
                     <input type="tel" id="phone" name="phone" required>
                 </div>
             </div>
+
+            <!-- Hidden fields for score data -->
+            <input type="hidden" name="testType" value="ECMO Post-Test">
+            <input type="hidden" name="questionsCorrect" id="questionsCorrect" value="">
+            <input type="hidden" name="questionsWrong" id="questionsWrong" value="">
+            <input type="hidden" name="timeInMinutes" id="timeInMinutes" value="">
+            <input type="hidden" name="totalScore" id="totalScore" value="">
+            <input type="hidden" name="percentage" id="percentage" value="">
 
             <div class="question">
                 <h3>Question 1 of 35</h3>
@@ -774,6 +786,12 @@
             clearInterval(timerInterval);
         }
 
+        function getElapsedTimeInMinutes() {
+            const now = new Date();
+            const elapsed = now - startTime;
+            return Math.round(elapsed / (1000 * 60)); // Convert to minutes
+        }
+
         function getElapsedTime() {
             const now = new Date();
             const elapsed = now - startTime;
@@ -802,7 +820,8 @@
         // Calculate score
         function calculateScore() {
             let correct = 0;
-            const formData = new FormData(document.getElementById('postTestForm'));
+            const form = document.getElementById('postTestForm');
+            const formData = new FormData(form);
             
             for (let i = 1; i <= 35; i++) {
                 const userAnswer = formData.get(`q${i}`);
@@ -811,10 +830,14 @@
                 }
             }
             
+            const wrong = 35 - correct;
+            const percentage = Math.round((correct / 35) * 100);
+            
             return {
                 correct: correct,
+                wrong: wrong,
                 total: 35,
-                percentage: Math.round((correct / 35) * 100)
+                percentage: percentage
             };
         }
 
@@ -849,14 +872,26 @@
             return { valid: true };
         }
 
-        // Form submission
-        async function submitForm(e) {
+        // Update hidden fields before submission
+        function updateHiddenFields() {
+            const score = calculateScore();
+            const timeMinutes = getElapsedTimeInMinutes();
+            
+            document.getElementById('questionsCorrect').value = score.correct;
+            document.getElementById('questionsWrong').value = score.wrong;
+            document.getElementById('timeInMinutes').value = timeMinutes;
+            document.getElementById('totalScore').value = `${score.correct}/35`;
+            document.getElementById('percentage').value = `${score.percentage}%`;
+        }
+
+        // Form submission handler
+        function handleSubmit(e) {
             e.preventDefault();
             
             const validation = validateForm();
             if (!validation.valid) {
                 showError(validation.message);
-                return;
+                return false;
             }
 
             const submitBtn = document.getElementById('submitBtn');
@@ -865,36 +900,23 @@
             submitBtn.textContent = 'Submitting...';
             submitBtn.disabled = true;
 
+            // Update hidden fields with score data
+            updateHiddenFields();
+            
+            // Stop timer
+            stopTimer();
+
             try {
-                const formData = new FormData(document.getElementById('postTestForm'));
-                
-                // Add calculated fields
-                const score = calculateScore();
-                formData.append('score', `${score.correct}/35`);
-                formData.append('percentage', `${score.percentage}%`);
-                formData.append('timeTaken', getElapsedTime());
-                formData.append('testType', 'ECMO Post-Test');
-
-                const response = await fetch('https://submit-form.com/rGOpHRDIr', {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    stopTimer();
-                    showSuccess('Post-test submitted successfully! Thank you for completing the assessment.');
-                    submitBtn.style.display = 'none';
-                    displayScore();
-                } else {
-                    throw new Error('Submission failed');
-                }
+                // Submit the form normally (no AJAX)
+                document.getElementById('postTestForm').submit();
+                return true;
             } catch (error) {
-                console.error('Submission error:', error);
+                console.error('Form submission error:', error);
                 showError('Form submission failed. Please use the "Show My Score" button below to get your results.');
                 alternativeBtn.style.display = 'inline-block';
-            } finally {
                 submitBtn.textContent = 'Submit Post-Test';
                 submitBtn.disabled = false;
+                return false;
             }
         }
 
@@ -928,7 +950,7 @@
         }
 
         // Event listeners
-        document.getElementById('postTestForm').addEventListener('submit', submitForm);
+        document.getElementById('postTestForm').addEventListener('submit', handleSubmit);
         document.getElementById('alternativeBtn').addEventListener('click', showAlternativeScore);
 
         // Add change listener to all radio buttons for progress tracking
