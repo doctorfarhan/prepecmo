@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECMO Pre-Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #2c5aa0;
+        }
+
+        h1 {
+            color: #2c5aa0;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .timer-section {
+            background: #e8f0fe;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #1a73e8;
+            margin-bottom: 10px;
+        }
+
+        .exam-duration {
+            font-size: 1.1em;
+            color: #666;
+            background: #fff3cd;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            border: 2px solid #ffeaa7;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .user-info h3 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus {
+            border-color: #2c5aa0;
+            outline: none;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .question {
+            background: #fff;
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            border-left: 4px solid #2c5aa0;
+        }
+
+        .question h3 {
+            color: #2c5aa0;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .options label {
+            font-weight: normal;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #f0f8ff;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .submit-btn {
+            background: #2c5aa0;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1e3f73;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .success-message {
+            color: #155724;
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .alternative-btn {
+            background: #ff6b35;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 15px;
+            display: none;
+        }
+
+        .alternative-btn:hover {
+            background: #e55a2b;
+        }
+
+        .score-display {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .score-display h3 {
+            color: #28a745;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .score-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #28a745;
+            margin: 15px 0;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .timer {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ECMO Pre-Test</h1>
+            <p>Complete the following 15 questions to assess your baseline ECMO knowledge</p>
+        </div>
+
+        <div class="timer-section">
+            <div class="timer" id="timer">00:00:00</div>
+            <div class="exam-duration">⚠️ EXAM DURATION: Set to 30 minutes (modify examDurationMinutes variable in code)</div>
+        </div>
+
+        <form id="preTestForm">
+            <div class="user-info">
+                <h3>Personal Information</h3>
+                <div class="input-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>Question 1 of 15</h3>
+                <p>The primary reason ECMO was adopted for ICU patients instead of traditional bypass circuits is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q1" value="A"> A. It requires no anticoagulation</label></li>
+                    <li><label><input type="radio" name="q1" value="B"> B. It can be used for days to weeks rather than hours</label></li>
+                    <li><label><input type="radio" name="q1" value="C"> C. It does not require a pump</label></li>
+                    <li><label><input type="radio" name="q1" value="D"> D. It cures the underlying disease</label></li>
+                    <li><label><input type="radio" name="q1" value="E"> E. It works without oxygenators</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 2 of 15</h3>
+                <p>Which organization sets international standards and guidelines for ECMO practice?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q2" value="A"> A. WHO</label></li>
+                    <li><label><input type="radio" name="q2" value="B"> B. ELSO (Extracorporeal Life Support Organization)</label></li>
+                    <li><label><input type="radio" name="q2" value="C"> C. FDA</label></li>
+                    <li><label><input type="radio" name="q2" value="D"> D. ISICEM</label></li>
+                    <li><label><input type="radio" name="q2" value="E"> E. NIH</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 3 of 15</h3>
+                <p>ECMO is fundamentally different from mechanical ventilation because:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q3" value="A"> A. ECMO supports both gas exchange and circulation</label></li>
+                    <li><label><input type="radio" name="q3" value="B"> B. ECMO avoids blood exposure to artificial surfaces</label></li>
+                    <li><label><input type="radio" name="q3" value="C"> C. Ventilation provides higher FiO₂ than ECMO</label></li>
+                    <li><label><input type="radio" name="q3" value="D"> D. ECMO does not require a pump</label></li>
+                    <li><label><input type="radio" name="q3" value="E"> E. ECMO does not require monitoring</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 4 of 15</h3>
+                <p>In VV-ECMO, systemic oxygenation primarily depends on:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q4" value="A"> A. Sweep gas flow</label></li>
+                    <li><label><input type="radio" name="q4" value="B"> B. Blood flow through ECMO circuit (Qecmo)</label></li>
+                    <li><label><input type="radio" name="q4" value="C"> C. Patient's tidal volume</label></li>
+                    <li><label><input type="radio" name="q4" value="D"> D. Circuit tubing length</label></li>
+                    <li><label><input type="radio" name="q4" value="E"> E. Cannula suture tightness</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 5 of 15</h3>
+                <p>In VA-ECMO, the nurse should be most alert to signs of:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q5" value="A"> A. Increased LV afterload and pulmonary edema</label></li>
+                    <li><label><input type="radio" name="q5" value="B"> B. Oxygenator gas leak</label></li>
+                    <li><label><input type="radio" name="q5" value="C"> C. Circuit tubing discoloration</label></li>
+                    <li><label><input type="radio" name="q5" value="D"> D. Distal nerve injury</label></li>
+                    <li><label><input type="radio" name="q5" value="E"> E. FiO₂ fluctuations</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 6 of 15</h3>
+                <p>Sweep gas flow controls:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q6" value="A"> A. Oxygenation</label></li>
+                    <li><label><input type="radio" name="q6" value="B"> B. Carbon dioxide clearance</label></li>
+                    <li><label><input type="radio" name="q6" value="C"> C. Both O₂ and CO₂ equally</label></li>
+                    <li><label><input type="radio" name="q6" value="D"> D. Pump speed</label></li>
+                    <li><label><input type="radio" name="q6" value="E"> E. Blood pressure</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 7 of 15</h3>
+                <p>A patient on VV-ECMO has SaO₂ 75% despite adequate ECMO flow. Which is the most likely cause?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q7" value="A"> A. Recirculation</label></li>
+                    <li><label><input type="radio" name="q7" value="B"> B. Pump malfunction</label></li>
+                    <li><label><input type="radio" name="q7" value="C"> C. Cannula suture loosened</label></li>
+                    <li><label><input type="radio" name="q7" value="D"> D. Low sweep</label></li>
+                    <li><label><input type="radio" name="q7" value="E"> E. High hemoglobin</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 8 of 15</h3>
+                <p>Why can a patient on VA-ECMO still develop hypoxemia in the brain and heart (Harlequin syndrome)?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q8" value="A"> A. Cannula tip in hepatic vein</label></li>
+                    <li><label><input type="radio" name="q8" value="B"> B. Poor native lung oxygenation supplies coronaries/brain while ECMO perfuses lower body</label></li>
+                    <li><label><input type="radio" name="q8" value="C"> C. Circuit FiO₂ is too high</label></li>
+                    <li><label><input type="radio" name="q8" value="D"> D. Too much sweep</label></li>
+                    <li><label><input type="radio" name="q8" value="E"> E. ECMO flow is >6 L/min</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 9 of 15</h3>
+                <p>Increasing sweep gas without changing blood flow primarily results in:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q9" value="A"> A. Lower PaCO₂</label></li>
+                    <li><label><input type="radio" name="q9" value="B"> B. Higher PaO₂</label></li>
+                    <li><label><input type="radio" name="q9" value="C"> C. Higher MAP</label></li>
+                    <li><label><input type="radio" name="q9" value="D"> D. Higher hemoglobin</label></li>
+                    <li><label><input type="radio" name="q9" value="E"> E. Reduced preload</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 10 of 15</h3>
+                <p>In VV-ECMO, nurses should expect SpO₂ targets to often be:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q10" value="A"> A. 100% always</label></li>
+                    <li><label><input type="radio" name="q10" value="B"> B. 88–92% is acceptable</label></li>
+                    <li><label><input type="radio" name="q10" value="C"> C. 70–75%</label></li>
+                    <li><label><input type="radio" name="q10" value="D"> D. Not measurable</label></li>
+                    <li><label><input type="radio" name="q10" value="E"> E. Always <80%</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 11 of 15</h3>
+                <p>The best candidate for VV-ECMO is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q11" value="A"> A. Severe ARDS with refractory hypoxemia on optimal ventilation</label></li>
+                    <li><label><input type="radio" name="q11" value="B"> B. COPD with mild hypercapnia</label></li>
+                    <li><label><input type="radio" name="q11" value="C"> C. Hypertension on ventilator day 1</label></li>
+                    <li><label><input type="radio" name="q11" value="D"> D. Advanced cancer with multiorgan failure</label></li>
+                    <li><label><input type="radio" name="q11" value="E"> E. End-stage heart failure on hospice</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 12 of 15</h3>
+                <p>Patients with irreversible conditions (e.g., severe dementia, advanced cancer) are:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q12" value="A"> A. Strong candidates for ECMO</label></li>
+                    <li><label><input type="radio" name="q12" value="B"> B. Contraindicated due to futility</label></li>
+                    <li><label><input type="radio" name="q12" value="C"> C. Best managed with more ECMO flow</label></li>
+                    <li><label><input type="radio" name="q12" value="D"> D. Managed with transplant only</label></li>
+                    <li><label><input type="radio" name="q12" value="E"> E. Managed with increased sweep gas</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 13 of 15</h3>
+                <p>For VV-ECMO, the most common indication in adults is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q13" value="A"> A. Severe ARDS</label></li>
+                    <li><label><input type="radio" name="q13" value="B"> B. Postpartum hemorrhage</label></li>
+                    <li><label><input type="radio" name="q13" value="C"> C. Myocarditis</label></li>
+                    <li><label><input type="radio" name="q13" value="D"> D. Cardiac tamponade</label></li>
+                    <li><label><input type="radio" name="q13" value="E"> E. Aortic dissection</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 14 of 15</h3>
+                <p>For VA-ECMO, the classic indication is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q14" value="A"> A. Cardiogenic shock unresponsive to drugs</label></li>
+                    <li><label><input type="radio" name="q14" value="B"> B. Severe bronchospasm</label></li>
+                    <li><label><input type="radio" name="q14" value="C"> C. Mild anemia</label></li>
+                    <li><label><input type="radio" name="q14" value="D"> D. COPD exacerbation</label></li>
+                    <li><label><input type="radio" name="q14" value="E"> E. Pulmonary embolism without instability</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 15 of 15</h3>
+                <p>A patient with DNR orders should be:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q15" value="A"> A. Automatically placed on ECMO</label></li>
+                    <li><label><input type="radio" name="q15" value="B"> B. Carefully reviewed as DNR status usually contraindicates ECMO</label></li>
+                    <li><label><input type="radio" name="q15" value="C"> C. Treated with maximum flow</label></li>
+                    <li><label><input type="radio" name="q15" value="D"> D. Cannulated immediately</label></li>
+                    <li><label><input type="radio" name="q15" value="E"> E. Always considered for VV-ECMO only</label></li>
+                </ul>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">Submit Pre-Test</button>
+                <button type="button" class="alternative-btn" id="alternativeBtn">Show My Score</button>
+            </div>
+
+            <div class="score-display" id="scoreDisplay">
+                <h3>Your Pre-Test Score</h3>
+                <div class="score-number" id="scoreNumber">0/15</div>
+                <p><strong>Percentage:</strong> <span id="scorePercentage">0%</span></p>
+                <p><strong>Time Taken:</strong> <span id="timeTaken">00:00:00</span></p>
+                <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                    Screenshot this result and send to your quizmaster if form submission failed.
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // CONFIGURE EXAM DURATION HERE (in minutes)
+        const examDurationMinutes = 30;
+        
+        // Answer key for grading
+        const answerKey = {
+            q1: 'B', q2: 'B', q3: 'A', q4: 'B', q5: 'A',
+            q6: 'B', q7: 'A', q8: 'B', q9: 'A', q10: 'B',
+            q11: 'A', q12: 'B', q13: 'A', q14: 'A', q15: 'B'
+        };
+
+        // Timer functionality
+        let startTime = new Date();
+        let timerInterval;
+
+        function updateTimer() {
+            const now = new Date();
+            const elapsed = now - startTime;
+            const hours = Math.floor(elapsed / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+            
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer').textContent = timeString;
+        }
+
+        function startTimer() {
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function getElapsedTime() {
+            const now = new Date();
+            const elapsed = now - startTime;
+            const hours = Math.floor(elapsed / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Calculate score
+        function calculateScore() {
+            let correct = 0;
+            const formData = new FormData(document.getElementById('preTestForm'));
+            
+            for (let i = 1; i <= 15; i++) {
+                const userAnswer = formData.get(`q${i}`);
+                if (userAnswer === answerKey[`q${i}`]) {
+                    correct++;
+                }
+            }
+            
+            return {
+                correct: correct,
+                total: 15,
+                percentage: Math.round((correct / 15) * 100)
+            };
+        }
+
+        // Display score
+        function displayScore() {
+            const score = calculateScore();
+            const timeTaken = getElapsedTime();
+            
+            document.getElementById('scoreNumber').textContent = `${score.correct}/15`;
+            document.getElementById('scorePercentage').textContent = `${score.percentage}%`;
+            document.getElementById('timeTaken').textContent = timeTaken;
+            document.getElementById('scoreDisplay').style.display = 'block';
+        }
+
+        // Form validation
+        function validateForm() {
+            const form = document.getElementById('preTestForm');
+            const formData = new FormData(form);
+            
+            // Check required fields
+            if (!formData.get('fullName') || !formData.get('email') || !formData.get('phone')) {
+                return { valid: false, message: 'Please fill in all personal information fields.' };
+            }
+            
+            // Check if all questions are answered
+            for (let i = 1; i <= 15; i++) {
+                if (!formData.get(`q${i}`)) {
+                    return { valid: false, message: `Please answer question ${i}.` };
+                }
+            }
+            
+            return { valid: true };
+        }
+
+        // Form submission
+        async function submitForm(e) {
+            e.preventDefault();
+            
+            const validation = validateForm();
+            if (!validation.valid) {
+                showError(validation.message);
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const alternativeBtn = document.getElementById('alternativeBtn');
+            
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(document.getElementById('preTestForm'));
+                
+                // Add calculated fields
+                const score = calculateScore();
+                formData.append('score', `${score.correct}/15`);
+                formData.append('percentage', `${score.percentage}%`);
+                formData.append('timeTaken', getElapsedTime());
+                formData.append('testType', 'ECMO Pre-Test');
+
+                const response = await fetch('https://submit-form.com/WFqsRRaPC', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    stopTimer();
+                    showSuccess('Pre-test submitted successfully! Thank you for completing the assessment.');
+                    submitBtn.style.display = 'none';
+                    displayScore();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showError('Form submission failed. Please use the "Show My Score" button below to get your results.');
+                alternativeBtn.style.display = 'inline-block';
+            } finally {
+                submitBtn.textContent = 'Submit Pre-Test';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Alternative score display
+        function showAlternativeScore() {
+            const validation = validateForm();
+            if (!validation.valid) {
+                showError(validation.message);
+                return;
+            }
+            
+            stopTimer();
+            displayScore();
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('alternativeBtn').style.display = 'none';
+        }
+
+        // Error/success message functions
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('preTestForm').addEventListener('submit', submitForm);
+        document.getElementById('alternativeBtn').addEventListener('click', showAlternativeScore);
+
+        // Start timer when page loads
+        startTimer();
+
+        // Update exam duration display
+        document.addEventListener('DOMContentLoaded', function() {
+            const durationElement = document.querySelector('.exam-duration');
+            durationElement.innerHTML = `⚠️ EXAM DURATION: Set to ${examDurationMinutes} minutes (modify examDurationMinutes variable in code)`;
+        });
+    </script>
+</body>
+</html>

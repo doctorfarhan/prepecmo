@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ECMO Post-Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #28a745;
+        }
+
+        h1 {
+            color: #28a745;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .timer-section {
+            background: #e8f5e8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .timer {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #28a745;
+            margin-bottom: 10px;
+        }
+
+        .exam-duration {
+            font-size: 1.1em;
+            color: #666;
+            background: #fff3cd;
+            padding: 8px 15px;
+            border-radius: 5px;
+            display: inline-block;
+            border: 2px solid #ffeaa7;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+        }
+
+        .user-info h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        input[type="text"], input[type="email"], input[type="tel"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, input[type="tel"]:focus {
+            border-color: #28a745;
+            outline: none;
+        }
+
+        .required {
+            color: #dc3545;
+        }
+
+        .question {
+            background: #fff;
+            margin-bottom: 25px;
+            padding: 20px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            border-left: 4px solid #28a745;
+        }
+
+        .question h3 {
+            color: #28a745;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+
+        .options {
+            list-style: none;
+        }
+
+        .options li {
+            margin-bottom: 10px;
+        }
+
+        .options input[type="radio"] {
+            margin-right: 10px;
+            transform: scale(1.2);
+        }
+
+        .options label {
+            font-weight: normal;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .options label:hover {
+            background-color: #f0f8f0;
+        }
+
+        .submit-section {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .submit-btn {
+            background: #28a745;
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .submit-btn:hover {
+            background: #1e7e34;
+        }
+
+        .submit-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .error-message {
+            color: #dc3545;
+            background: #f8d7da;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .success-message {
+            color: #155724;
+            background: #d4edda;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            display: none;
+        }
+
+        .alternative-btn {
+            background: #ff6b35;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-left: 15px;
+            display: none;
+        }
+
+        .alternative-btn:hover {
+            background: #e55a2b;
+        }
+
+        .score-display {
+            background: #e8f5e8;
+            border: 2px solid #28a745;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .score-display h3 {
+            color: #28a745;
+            font-size: 1.5em;
+            margin-bottom: 10px;
+        }
+
+        .score-number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #28a745;
+            margin: 15px 0;
+        }
+
+        .progress-indicator {
+            background: #e9ecef;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            background: #28a745;
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .timer {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ECMO Post-Test</h1>
+            <p>Complete the following 35 questions to assess your ECMO knowledge after training</p>
+        </div>
+
+        <div class="timer-section">
+            <div class="timer" id="timer">00:00:00</div>
+            <div class="exam-duration">⚠️ EXAM DURATION: Set to 60 minutes (modify examDurationMinutes variable in code)</div>
+        </div>
+
+        <div class="progress-indicator">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <form id="postTestForm">
+            <div class="user-info">
+                <h3>Personal Information</h3>
+                <div class="input-group">
+                    <label for="fullName">Full Name <span class="required">*</span></label>
+                    <input type="text" id="fullName" name="fullName" required>
+                </div>
+                <div class="input-group">
+                    <label for="email">Email Address <span class="required">*</span></label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                <div class="input-group">
+                    <label for="phone">Phone Number <span class="required">*</span></label>
+                    <input type="tel" id="phone" name="phone" required>
+                </div>
+            </div>
+
+            <div class="question">
+                <h3>Question 1 of 35</h3>
+                <p>Increasing pump RPM on RotaFlow will increase flow only if:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q1" value="A"> A. Venous return is adequate</label></li>
+                    <li><label><input type="radio" name="q1" value="B"> B. Sweep gas is maximized</label></li>
+                    <li><label><input type="radio" name="q1" value="C"> C. FiO₂ is at 1.0</label></li>
+                    <li><label><input type="radio" name="q1" value="D"> D. Cannula is malpositioned</label></li>
+                    <li><label><input type="radio" name="q1" value="E"> E. Blood is heparinized</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 2 of 35</h3>
+                <p>Sweep gas flow is adjusted on RotaFlow using:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q2" value="A"> A. The blender knob</label></li>
+                    <li><label><input type="radio" name="q2" value="B"> B. RPM dial</label></li>
+                    <li><label><input type="radio" name="q2" value="C"> C. Alarm silence button</label></li>
+                    <li><label><input type="radio" name="q2" value="D"> D. Transmembrane pressure monitor</label></li>
+                    <li><label><input type="radio" name="q2" value="E"> E. Heater-cooler unit</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 3 of 35</h3>
+                <p>A high TMP alarm indicates:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q3" value="A"> A. Clot formation in the oxygenator</label></li>
+                    <li><label><input type="radio" name="q3" value="B"> B. Pump head fracture</label></li>
+                    <li><label><input type="radio" name="q3" value="C"> C. Low sweep gas</label></li>
+                    <li><label><input type="radio" name="q3" value="D"> D. Cannula dislodgement</label></li>
+                    <li><label><input type="radio" name="q3" value="E"> E. Battery low</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 4 of 35</h3>
+                <p>If flow drops despite high RPM, the nurse should suspect:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q4" value="A"> A. Suction events / poor preload</label></li>
+                    <li><label><input type="radio" name="q4" value="B"> B. Sweep too high</label></li>
+                    <li><label><input type="radio" name="q4" value="C"> C. TMP low</label></li>
+                    <li><label><input type="radio" name="q4" value="D"> D. High FiO₂</label></li>
+                    <li><label><input type="radio" name="q4" value="E"> E. RPM dial stuck</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 5 of 35</h3>
+                <p>To prevent air embolism during circuit connection, the nurse should always:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q5" value="A"> A. Clamp both limbs before disconnection</label></li>
+                    <li><label><input type="radio" name="q5" value="B"> B. Increase sweep</label></li>
+                    <li><label><input type="radio" name="q5" value="C"> C. Turn FiO₂ to 21%</label></li>
+                    <li><label><input type="radio" name="q5" value="D"> D. Raise patient head</label></li>
+                    <li><label><input type="radio" name="q5" value="E"> E. Silence alarms</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 6 of 35</h3>
+                <p>Alarm limits on RotaFlow should be:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q6" value="A"> A. Turned off overnight</label></li>
+                    <li><label><input type="radio" name="q6" value="B"> B. Set appropriately and never disabled</label></li>
+                    <li><label><input type="radio" name="q6" value="C"> C. Ignored if patient looks stable</label></li>
+                    <li><label><input type="radio" name="q6" value="D"> D. Reset randomly each shift</label></li>
+                    <li><label><input type="radio" name="q6" value="E"> E. Only used for flow >5 L/min</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 7 of 35</h3>
+                <p>Hemolysis in ECMO is best detected by:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q7" value="A"> A. Plasma free hemoglobin / dark urine</label></li>
+                    <li><label><input type="radio" name="q7" value="B"> B. SpO₂ probe</label></li>
+                    <li><label><input type="radio" name="q7" value="C"> C. TMP drop</label></li>
+                    <li><label><input type="radio" name="q7" value="D"> D. MAP increase</label></li>
+                    <li><label><input type="radio" name="q7" value="E"> E. FiO₂ rise</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 8 of 35</h3>
+                <p>Clotting in the oxygenator usually presents as:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q8" value="A"> A. Rising TMP and falling PaO₂</label></li>
+                    <li><label><input type="radio" name="q8" value="B"> B. Stable TMP with high PaO₂</label></li>
+                    <li><label><input type="radio" name="q8" value="C"> C. Improved CO₂ clearance</label></li>
+                    <li><label><input type="radio" name="q8" value="D"> D. Higher hemoglobin</label></li>
+                    <li><label><input type="radio" name="q8" value="E"> E. Bleeding gums</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 9 of 35</h3>
+                <p>ECMO circuit tubing should be checked every:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q9" value="A"> A. 1–2 hours for color changes, kinks, condensation, and clots</label></li>
+                    <li><label><input type="radio" name="q9" value="B"> B. Once daily only</label></li>
+                    <li><label><input type="radio" name="q9" value="C"> C. Only when alarms occur</label></li>
+                    <li><label><input type="radio" name="q9" value="D"> D. At initiation and decannulation only</label></li>
+                    <li><label><input type="radio" name="q9" value="E"> E. Weekly</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 10 of 35</h3>
+                <p>If the circuit temperature drops, nurses should:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q10" value="A"> A. Check heater-cooler connection</label></li>
+                    <li><label><input type="radio" name="q10" value="B"> B. Increase RPM</label></li>
+                    <li><label><input type="radio" name="q10" value="C"> C. Increase sweep</label></li>
+                    <li><label><input type="radio" name="q10" value="D"> D. Change cannula</label></li>
+                    <li><label><input type="radio" name="q10" value="E"> E. Stop anticoagulation</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 11 of 35</h3>
+                <p>Recirculation in VV-ECMO can cause:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q11" value="A"> A. Low SaO₂ despite good flows</label></li>
+                    <li><label><input type="radio" name="q11" value="B"> B. High MAP</label></li>
+                    <li><label><input type="radio" name="q11" value="C"> C. Hemolysis always</label></li>
+                    <li><label><input type="radio" name="q11" value="D"> D. Higher urine output</label></li>
+                    <li><label><input type="radio" name="q11" value="E"> E. Better oxygenation</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 12 of 35</h3>
+                <p>Blood flow in ECMO circuit is primarily determined by:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q12" value="A"> A. Pump RPM + cannula size + venous return</label></li>
+                    <li><label><input type="radio" name="q12" value="B"> B. Sweep gas</label></li>
+                    <li><label><input type="radio" name="q12" value="C"> C. FiO₂</label></li>
+                    <li><label><input type="radio" name="q12" value="D"> D. TMP</label></li>
+                    <li><label><input type="radio" name="q12" value="E"> E. Patient's heart rate</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 13 of 35</h3>
+                <p>Nurses must check cannula insertion sites at least:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q13" value="A"> A. Every 1–2 hours for bleeding, hematoma, or dislodgement</label></li>
+                    <li><label><input type="radio" name="q13" value="B"> B. Once per day</label></li>
+                    <li><label><input type="radio" name="q13" value="C"> C. Only if alarms occur</label></li>
+                    <li><label><input type="radio" name="q13" value="D"> D. Once at shift start</label></li>
+                    <li><label><input type="radio" name="q13" value="E"> E. Never</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 14 of 35</h3>
+                <p>The most feared complication of femoral arterial cannulation is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q14" value="A"> A. Limb ischemia</label></li>
+                    <li><label><input type="radio" name="q14" value="B"> B. Fever</label></li>
+                    <li><label><input type="radio" name="q14" value="C"> C. Bruising</label></li>
+                    <li><label><input type="radio" name="q14" value="D"> D. Clot in venous cannula</label></li>
+                    <li><label><input type="radio" name="q14" value="E"> E. Cannula noise</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 15 of 35</h3>
+                <p>Limb perfusion in VA-ECMO with femoral cannulation is monitored by:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q15" value="A"> A. Distal perfusion cannula + Doppler pulse checks</label></li>
+                    <li><label><input type="radio" name="q15" value="B"> B. SpO₂ probe on hand</label></li>
+                    <li><label><input type="radio" name="q15" value="C"> C. Sweep gas</label></li>
+                    <li><label><input type="radio" name="q15" value="D"> D. TMP monitoring</label></li>
+                    <li><label><input type="radio" name="q15" value="E"> E. Patient's urine output</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 16 of 35</h3>
+                <p>A loose cannula suture is most dangerous because:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q16" value="A"> A. Risk of accidental decannulation → catastrophic bleeding</label></li>
+                    <li><label><input type="radio" name="q16" value="B"> B. Risk of improved flows</label></li>
+                    <li><label><input type="radio" name="q16" value="C"> C. Risk of TMP fall</label></li>
+                    <li><label><input type="radio" name="q16" value="D"> D. Improves recirculation</label></li>
+                    <li><label><input type="radio" name="q16" value="E"> E. Causes tachycardia</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 17 of 35</h3>
+                <p>Cannula dressings should be:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q17" value="A"> A. Sterile, transparent, frequently inspected for bleeding/infection</label></li>
+                    <li><label><input type="radio" name="q17" value="B"> B. Covered completely with opaque bandages</label></li>
+                    <li><label><input type="radio" name="q17" value="C"> C. Never changed during ECMO</label></li>
+                    <li><label><input type="radio" name="q17" value="D"> D. Changed daily regardless of integrity</label></li>
+                    <li><label><input type="radio" name="q17" value="E"> E. Removed to air</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 18 of 35</h3>
+                <p>In dual-site VV-ECMO (femoral + jugular), the return cannula is usually:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q18" value="A"> A. Right internal jugular vein</label></li>
+                    <li><label><input type="radio" name="q18" value="B"> B. Left femoral vein</label></li>
+                    <li><label><input type="radio" name="q18" value="C"> C. Right femoral artery</label></li>
+                    <li><label><input type="radio" name="q18" value="D"> D. Subclavian artery</label></li>
+                    <li><label><input type="radio" name="q18" value="E"> E. Carotid artery</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 19 of 35</h3>
+                <p>Sudden drop in flow with chattering tubing indicates:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q19" value="A"> A. Hypovolemia or suction event</label></li>
+                    <li><label><input type="radio" name="q19" value="B"> B. Oxygenator clot</label></li>
+                    <li><label><input type="radio" name="q19" value="C"> C. High TMP</label></li>
+                    <li><label><input type="radio" name="q19" value="D"> D. Sweep off</label></li>
+                    <li><label><input type="radio" name="q19" value="E"> E. Cannula infection</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 20 of 35</h3>
+                <p>Dark blood in post-oxygenator tubing indicates:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q20" value="A"> A. Oxygenator failure</label></li>
+                    <li><label><input type="radio" name="q20" value="B"> B. Hemolysis</label></li>
+                    <li><label><input type="radio" name="q20" value="C"> C. High sweep</label></li>
+                    <li><label><input type="radio" name="q20" value="D"> D. High TMP</label></li>
+                    <li><label><input type="radio" name="q20" value="E"> E. Air in circuit</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 21 of 35</h3>
+                <p>Sudden bright red blood in venous line suggests:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q21" value="A"> A. Recirculation</label></li>
+                    <li><label><input type="radio" name="q21" value="B"> B. Pump head fracture</label></li>
+                    <li><label><input type="radio" name="q21" value="C"> C. Patient cannula dislodgement</label></li>
+                    <li><label><input type="radio" name="q21" value="D"> D. TMP rise</label></li>
+                    <li><label><input type="radio" name="q21" value="E"> E. Methemoglobinemia</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 22 of 35</h3>
+                <p>Rising CO₂ despite high sweep suggests:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q22" value="A"> A. Oxygenator clot/failure</label></li>
+                    <li><label><input type="radio" name="q22" value="B"> B. Cannula bleeding</label></li>
+                    <li><label><input type="radio" name="q22" value="C"> C. Hemolysis</label></li>
+                    <li><label><input type="radio" name="q22" value="D"> D. High TMP</label></li>
+                    <li><label><input type="radio" name="q22" value="E"> E. Recirculation</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 23 of 35</h3>
+                <p>Nurse notices continuous bubbles in circuit - this indicates:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q23" value="A"> A. Air entry (dangerous emergency → clamp and call team)</label></li>
+                    <li><label><input type="radio" name="q23" value="B"> B. High sweep</label></li>
+                    <li><label><input type="radio" name="q23" value="C"> C. Low TMP</label></li>
+                    <li><label><input type="radio" name="q23" value="D"> D. RPM too low</label></li>
+                    <li><label><input type="radio" name="q23" value="E"> E. Venous collapse only</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 24 of 35</h3>
+                <p>MAP falls suddenly during ECMO - first nursing action?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q24" value="A"> A. Check circuit flow and patient volume status</label></li>
+                    <li><label><input type="radio" name="q24" value="B"> B. Increase sweep</label></li>
+                    <li><label><input type="radio" name="q24" value="C"> C. Tighten suture</label></li>
+                    <li><label><input type="radio" name="q24" value="D"> D. Silence alarm</label></li>
+                    <li><label><input type="radio" name="q24" value="E"> E. Raise FiO₂</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 25 of 35</h3>
+                <p>Hemolysis risk increases if:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q25" value="A"> A. Cannula too small for flow (high negative pressures)</label></li>
+                    <li><label><input type="radio" name="q25" value="B"> B. Sweep high</label></li>
+                    <li><label><input type="radio" name="q25" value="C"> C. TMP low</label></li>
+                    <li><label><input type="radio" name="q25" value="D"> D. Heater high</label></li>
+                    <li><label><input type="radio" name="q25" value="E"> E. Dressing changed</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 26 of 35</h3>
+                <p>Bleeding from cannula site requires:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q26" value="A"> A. Pressure + notify ECMO team urgently</label></li>
+                    <li><label><input type="radio" name="q26" value="B"> B. Increase RPM</label></li>
+                    <li><label><input type="radio" name="q26" value="C"> C. Reduce sweep</label></li>
+                    <li><label><input type="radio" name="q26" value="D"> D. Increase FiO₂</label></li>
+                    <li><label><input type="radio" name="q26" value="E"> E. Ignore if flow stable</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 27 of 35</h3>
+                <p>If circuit color difference disappears (both lines dark red), suspect:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q27" value="A"> A. Oxygenator failure</label></li>
+                    <li><label><input type="radio" name="q27" value="B"> B. TMP low</label></li>
+                    <li><label><input type="radio" name="q27" value="C"> C. RPM too high</label></li>
+                    <li><label><input type="radio" name="q27" value="D"> D. FiO₂ too high</label></li>
+                    <li><label><input type="radio" name="q27" value="E"> E. Sweep too high</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 28 of 35</h3>
+                <p>Patient on VA-ECMO develops pink frothy sputum - this indicates:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q28" value="A"> A. Pulmonary edema from LV distension → alert ECMO physician</label></li>
+                    <li><label><input type="radio" name="q28" value="B"> B. Cannula clot</label></li>
+                    <li><label><input type="radio" name="q28" value="C"> C. TMP rise</label></li>
+                    <li><label><input type="radio" name="q28" value="D"> D. High sweep</label></li>
+                    <li><label><input type="radio" name="q28" value="E"> E. Hemolysis</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 29 of 35</h3>
+                <p>Best bedside marker for adequate tissue oxygen delivery is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q29" value="A"> A. Lactate trend + mixed venous O₂ saturation</label></li>
+                    <li><label><input type="radio" name="q29" value="B"> B. TMP</label></li>
+                    <li><label><input type="radio" name="q29" value="C"> C. Cannula size</label></li>
+                    <li><label><input type="radio" name="q29" value="D"> D. SpO₂ probe alone</label></li>
+                    <li><label><input type="radio" name="q29" value="E"> E. Sweep gas</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 30 of 35</h3>
+                <p>Neurologic status during ECMO is best monitored by:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q30" value="A"> A. Pupil checks, sedation holidays, and neuroimaging if concern</label></li>
+                    <li><label><input type="radio" name="q30" value="B"> B. Sweep gas</label></li>
+                    <li><label><input type="radio" name="q30" value="C"> C. TMP</label></li>
+                    <li><label><input type="radio" name="q30" value="D"> D. Cannula dressing</label></li>
+                    <li><label><input type="radio" name="q30" value="E"> E. FiO₂</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 31 of 35</h3>
+                <p>Common long-term complication after ECMO is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q31" value="A"> A. Neurologic impairment from hypoxia/bleeding</label></li>
+                    <li><label><input type="radio" name="q31" value="B"> B. Improved muscle mass</label></li>
+                    <li><label><input type="radio" name="q31" value="C"> C. Permanent increased Hb</label></li>
+                    <li><label><input type="radio" name="q31" value="D"> D. Renal recovery always</label></li>
+                    <li><label><input type="radio" name="q31" value="E"> E. Guaranteed full recovery</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 32 of 35</h3>
+                <p>Which lab is critical daily on ECMO?</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q32" value="A"> A. ACT/aPTT + CBC + ABG + electrolytes</label></li>
+                    <li><label><input type="radio" name="q32" value="B"> B. Lipase only</label></li>
+                    <li><label><input type="radio" name="q32" value="C"> C. Troponin only</label></li>
+                    <li><label><input type="radio" name="q32" value="D"> D. Amylase</label></li>
+                    <li><label><input type="radio" name="q32" value="E"> E. Cholesterol</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 33 of 35</h3>
+                <p>In ECPR, nurse's most critical role during cannulation is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q33" value="A"> A. High-quality CPR until ECMO flow established</label></li>
+                    <li><label><input type="radio" name="q33" value="B"> B. Increase sweep</label></li>
+                    <li><label><input type="radio" name="q33" value="C"> C. Silence alarms</label></li>
+                    <li><label><input type="radio" name="q33" value="D"> D. Document consent</label></li>
+                    <li><label><input type="radio" name="q33" value="E"> E. Clamp lines randomly</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 34 of 35</h3>
+                <p>After ECPR initiation, neurologic outcome depends most on:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q34" value="A"> A. Low-flow time before ECMO</label></li>
+                    <li><label><input type="radio" name="q34" value="B"> B. Sweep settings</label></li>
+                    <li><label><input type="radio" name="q34" value="C"> C. FiO₂</label></li>
+                    <li><label><input type="radio" name="q34" value="D"> D. Cannula brand</label></li>
+                    <li><label><input type="radio" name="q34" value="E"> E. Dressing type</label></li>
+                </ul>
+            </div>
+
+            <div class="question">
+                <h3>Question 35 of 35</h3>
+                <p>During ECPR, once flow is established, nurse's immediate responsibility is:</p>
+                <ul class="options">
+                    <li><label><input type="radio" name="q35" value="A"> A. Ensure circuit secured, alarms active, and hemodynamic monitoring stable</label></li>
+                    <li><label><input type="radio" name="q35" value="B"> B. Decannulate patient</label></li>
+                    <li><label><input type="radio" name="q35" value="C"> C. Turn off sweep</label></li>
+                    <li><label><input type="radio" name="q35" value="D"> D. Increase FiO₂ to 50%</label></li>
+                    <li><label><input type="radio" name="q35" value="E"> E. Remove dressing</label></li>
+                </ul>
+            </div>
+
+            <div class="error-message" id="errorMessage"></div>
+            <div class="success-message" id="successMessage"></div>
+            
+            <div class="submit-section">
+                <button type="submit" class="submit-btn" id="submitBtn">Submit Post-Test</button>
+                <button type="button" class="alternative-btn" id="alternativeBtn">Show My Score</button>
+            </div>
+
+            <div class="score-display" id="scoreDisplay">
+                <h3>Your Post-Test Score</h3>
+                <div class="score-number" id="scoreNumber">0/35</div>
+                <p><strong>Percentage:</strong> <span id="scorePercentage">0%</span></p>
+                <p><strong>Time Taken:</strong> <span id="timeTaken">00:00:00</span></p>
+                <p style="margin-top: 15px; font-size: 0.9em; color: #666;">
+                    Screenshot this result and send to your quizmaster if form submission failed.
+                </p>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        // CONFIGURE EXAM DURATION HERE (in minutes)
+        const examDurationMinutes = 60;
+        
+        // Answer key for grading (Questions 16-50 from original, now q1-q35)
+        const answerKey = {
+            q1: 'A', q2: 'A', q3: 'A', q4: 'A', q5: 'A',
+            q6: 'B', q7: 'A', q8: 'A', q9: 'A', q10: 'A',
+            q11: 'A', q12: 'A', q13: 'A', q14: 'A', q15: 'A',
+            q16: 'A', q17: 'A', q18: 'A', q19: 'A', q20: 'A',
+            q21: 'A', q22: 'A', q23: 'A', q24: 'A', q25: 'A',
+            q26: 'A', q27: 'A', q28: 'A', q29: 'A', q30: 'A',
+            q31: 'A', q32: 'A', q33: 'A', q34: 'A', q35: 'A'
+        };
+
+        // Timer functionality
+        let startTime = new Date();
+        let timerInterval;
+
+        function updateTimer() {
+            const now = new Date();
+            const elapsed = now - startTime;
+            const hours = Math.floor(elapsed / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+            
+            const timeString = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            document.getElementById('timer').textContent = timeString;
+        }
+
+        function startTimer() {
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function getElapsedTime() {
+            const now = new Date();
+            const elapsed = now - startTime;
+            const hours = Math.floor(elapsed / (1000 * 60 * 60));
+            const minutes = Math.floor((elapsed % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((elapsed % (1000 * 60)) / 1000);
+            return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+
+        // Progress tracking
+        function updateProgress() {
+            const form = document.getElementById('postTestForm');
+            const formData = new FormData(form);
+            let answered = 0;
+            
+            for (let i = 1; i <= 35; i++) {
+                if (formData.get(`q${i}`)) {
+                    answered++;
+                }
+            }
+            
+            const progress = (answered / 35) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Calculate score
+        function calculateScore() {
+            let correct = 0;
+            const formData = new FormData(document.getElementById('postTestForm'));
+            
+            for (let i = 1; i <= 35; i++) {
+                const userAnswer = formData.get(`q${i}`);
+                if (userAnswer === answerKey[`q${i}`]) {
+                    correct++;
+                }
+            }
+            
+            return {
+                correct: correct,
+                total: 35,
+                percentage: Math.round((correct / 35) * 100)
+            };
+        }
+
+        // Display score
+        function displayScore() {
+            const score = calculateScore();
+            const timeTaken = getElapsedTime();
+            
+            document.getElementById('scoreNumber').textContent = `${score.correct}/35`;
+            document.getElementById('scorePercentage').textContent = `${score.percentage}%`;
+            document.getElementById('timeTaken').textContent = timeTaken;
+            document.getElementById('scoreDisplay').style.display = 'block';
+        }
+
+        // Form validation
+        function validateForm() {
+            const form = document.getElementById('postTestForm');
+            const formData = new FormData(form);
+            
+            // Check required fields
+            if (!formData.get('fullName') || !formData.get('email') || !formData.get('phone')) {
+                return { valid: false, message: 'Please fill in all personal information fields.' };
+            }
+            
+            // Check if all questions are answered
+            for (let i = 1; i <= 35; i++) {
+                if (!formData.get(`q${i}`)) {
+                    return { valid: false, message: `Please answer question ${i}.` };
+                }
+            }
+            
+            return { valid: true };
+        }
+
+        // Form submission
+        async function submitForm(e) {
+            e.preventDefault();
+            
+            const validation = validateForm();
+            if (!validation.valid) {
+                showError(validation.message);
+                return;
+            }
+
+            const submitBtn = document.getElementById('submitBtn');
+            const alternativeBtn = document.getElementById('alternativeBtn');
+            
+            submitBtn.textContent = 'Submitting...';
+            submitBtn.disabled = true;
+
+            try {
+                const formData = new FormData(document.getElementById('postTestForm'));
+                
+                // Add calculated fields
+                const score = calculateScore();
+                formData.append('score', `${score.correct}/35`);
+                formData.append('percentage', `${score.percentage}%`);
+                formData.append('timeTaken', getElapsedTime());
+                formData.append('testType', 'ECMO Post-Test');
+
+                const response = await fetch('https://submit-form.com/rGOpHRDIr', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    stopTimer();
+                    showSuccess('Post-test submitted successfully! Thank you for completing the assessment.');
+                    submitBtn.style.display = 'none';
+                    displayScore();
+                } else {
+                    throw new Error('Submission failed');
+                }
+            } catch (error) {
+                console.error('Submission error:', error);
+                showError('Form submission failed. Please use the "Show My Score" button below to get your results.');
+                alternativeBtn.style.display = 'inline-block';
+            } finally {
+                submitBtn.textContent = 'Submit Post-Test';
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Alternative score display
+        function showAlternativeScore() {
+            const validation = validateForm();
+            if (!validation.valid) {
+                showError(validation.message);
+                return;
+            }
+            
+            stopTimer();
+            displayScore();
+            document.getElementById('submitBtn').style.display = 'none';
+            document.getElementById('alternativeBtn').style.display = 'none';
+        }
+
+        // Error/success message functions
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        // Event listeners
+        document.getElementById('postTestForm').addEventListener('submit', submitForm);
+        document.getElementById('alternativeBtn').addEventListener('click', showAlternativeScore);
+
+        // Add change listener to all radio buttons for progress tracking
+        document.addEventListener('change', function(e) {
+            if (e.target.type === 'radio') {
+                updateProgress();
+            }
+        });
+
+        // Start timer when page loads
+        startTimer();
+
+        // Update exam duration display
+        document.addEventListener('DOMContentLoaded', function() {
+            const durationElement = document.querySelector('.exam-duration');
+            durationElement.innerHTML = `⚠️ EXAM DURATION: Set to ${examDurationMinutes} minutes (modify examDurationMinutes variable in code)`;
+        });
+    </script>
+</body>
+</html>
